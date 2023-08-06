@@ -1,4 +1,4 @@
-# CDN_Appolo
+# Melodia
 
 **Python based music player app.**
 
