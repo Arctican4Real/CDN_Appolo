@@ -78,7 +78,7 @@ print(f"You have chosen {chosenTrack['title']}")
 # Search for the Artist + Song Name + "Audio" on youtube with pytube
 # Example - "Avicii Waiting for love audio" is searched
 searchList = Search(
-    str(chosenTrack["title"] + str(chosenTrack["artist"]["name"])) + "audio"
+    str(chosenTrack["title"] + str(chosenTrack["artist"]["name"])) + " audio"
 )
 # Get the first video from search result
 firstResult = str(searchList.results[0])
