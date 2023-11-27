@@ -8,10 +8,10 @@ This project aims to create a feature-rich music streaming application that effe
 
 - Search for songs ✓
 - Download Songs ✓
+- Skip , Pause, Rewind, Loop songs
 - UI music player to play Tracks and Playlists
 - Create play and edit playlists
 - Shuffle play
-- Skip , Pause, Rewind, Loop songs
 
 ### Specifications
 
@@ -37,4 +37,4 @@ The initial release will be a desktop application, with potential plans for futu
 - Adeeb
 - Shubham
 - Nazia
-- Jigisha
+- ~~Jigisha~~
