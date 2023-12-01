@@ -118,6 +118,8 @@ trackBox.activate(0)
 
 
 for name in os.listdir("./music"):
+    if name == ".gitignore":
+        continue
     name = name.replace(".mp3", "")
     name = name.replace("_", " ")
     trackBox.insert('end', name)
