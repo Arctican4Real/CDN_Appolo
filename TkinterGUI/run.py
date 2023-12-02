@@ -17,7 +17,7 @@ screen.iconphoto(True, img)
 
 pygame.mixer.init()
 
-screen.geometry("440x600")
+screen.geometry("330x500")
 
 playBtnImg = PhotoImage(file="./sources/ctrlbtn/play.png")
 pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pause.png")
@@ -55,7 +55,7 @@ def changeCover(trackNum):
 
 
     curCover = Image.open(albumCover)
-    curCover = curCover.resize((300,300), Image.ANTIALIAS)
+    curCover = curCover.resize((250,250), Image.ANTIALIAS)
     curCover = ImageTk.PhotoImage(curCover)
 
     curCoverLabel.configure(image=curCover)
@@ -148,7 +148,7 @@ def nextTrack(move):
 
 #     mainBtnFunc(0)
 
-trackBox = Listbox(screen, bg="white",fg="blue",width=30)
+trackBox = Listbox(screen, bg="white",fg="blue",width=30, height=5)
 trackBox.activate(0)
 
 global tracks
@@ -174,7 +174,7 @@ albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
 global curCover
 
 curCover = Image.open(albumCover)
-curCover = curCover.resize((300,300), Image.ANTIALIAS)
+curCover = curCover.resize((250,250), Image.ANTIALIAS)
 curCover = ImageTk.PhotoImage(curCover)
 
 curCoverLabel = Label(image=curCover)
