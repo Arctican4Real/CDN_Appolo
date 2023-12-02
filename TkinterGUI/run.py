@@ -1,5 +1,6 @@
 from tkinter import *
 import pygame
+from PIL import ImageTk,Image
 import os
 
 screen = Tk()
@@ -12,11 +13,11 @@ screen.title("Melodia")
 img = PhotoImage(file='./sources/icon.gif')
 screen.tk.call('wm', 'iconphoto', screen._w, img)
 screen.iconphoto(True, img)
-screen.resizable(0,0)
+#screen.resizable(0,0)
 
 pygame.mixer.init()
 
-screen.geometry("310x400")
+screen.geometry("440x600")
 
 playBtnImg = PhotoImage(file="./sources/ctrlbtn/play.png")
 pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pause.png")
@@ -32,6 +33,32 @@ playState = 0
 #     pygame.mixer.music.load("./music/music.mp3")
 #     pygame.mixer.music.play(loops=0)
 
+def changeCover(trackNum):
+    # albumCover = trackBox.get(ACTIVE)
+    # albumCover = albumCover.replace(" ", "_")
+    # albumCover = albumCover.replace(".mp3", "")
+    # albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
+    # #print(f"ALBUM COVER FILE NAME : {albumCover}")
+
+    # curCover = Image.open(albumCover)
+    # curCover = curCover.resize((300,300), Image.ANTIALIAS)
+    # curCover = ImageTk.PhotoImage(curCover)
+
+    # curCoverLabel.configure(image=curCover) 
+
+    #####
+    global curCover
+
+    albumCover = tracks[trackNum]
+    albumCover = albumCover.replace(".mp3", "")
+    albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
+
+
+    curCover = Image.open(albumCover)
+    curCover = curCover.resize((300,300), Image.ANTIALIAS)
+    curCover = ImageTk.PhotoImage(curCover)
+
+    curCoverLabel.configure(image=curCover)
 
 def stop():
     print("Stop pressed")
@@ -45,18 +72,25 @@ def stop():
 
 def mainBtnFunc(mainQuery):
     global playState
+    global tracks
     mainQuery = playState
 
     if playState == 0:
         print("Play pressed first time")
 
         track = trackBox.get(ACTIVE)
+
         track = track.replace(" ", "_")
         track = f"./music/{track}.mp3"
+        trackIndex = tracks.index(track.replace("./music/", ""))
+
 
         pygame.mixer.music.load(track)
         pygame.mixer.music.play(loops=0)
         playstate = 1
+
+        changeCover(trackIndex)
+
 
     if playState == 1 :
         pygame.mixer.music.pause()
@@ -94,7 +128,9 @@ def nextTrack(move):
 
     trackBox.selection_clear(0, END)
     trackBox.activate(nextTrack)
-    trackBox.selection_set(nextTrack,last=None)
+    trackBox.selection_set(nextTrack,last=None)  
+
+    changeCover(nextTrack)  
 
     playState = 0
     mainBtnFunc(0)
@@ -113,16 +149,38 @@ def nextTrack(move):
 #     mainBtnFunc(0)
 
 trackBox = Listbox(screen, bg="white",fg="blue",width=30)
-trackBox.pack(pady=50)
 trackBox.activate(0)
 
+global tracks
+tracks = []
 
 for name in os.listdir("./music"):
-    if name == ".gitignore":
+    if name in [".gitignore", "albumCover"]:
         continue
+    tracks.append(name)
+
+
+tracks = sorted(tracks)
+
+for name in tracks:
     name = name.replace(".mp3", "")
     name = name.replace("_", " ")
     trackBox.insert('end', name)
+
+albumCover = tracks[0]
+albumCover = albumCover.replace(".mp3", "")
+albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
+
+global curCover
+
+curCover = Image.open(albumCover)
+curCover = curCover.resize((300,300), Image.ANTIALIAS)
+curCover = ImageTk.PhotoImage(curCover)
+
+curCoverLabel = Label(image=curCover)
+curCoverLabel.pack(pady=20)
+
+trackBox.pack()
 
 btnDiv = Frame(screen)
 btnDiv.pack()
