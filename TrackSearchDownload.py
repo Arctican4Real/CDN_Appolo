@@ -91,14 +91,14 @@ finalLink = "https://www.youtube.com/watch?v=" + vidID
 # This is a path to the folder where our song will be saved
 # It names the folder the title of the song, replacing spaces with underscores
 # Example - "Waiting_for_love"
-path = "./Downloads/" + str(chosenTrack["title"]).replace(" ", "_")
+path = "./music/" #+ str(chosenTrack["title"]).replace(" ", "_")
 
 # This is the song name and artist name, replacing spaces with underscores
 songName = str(chosenTrack["title"]).replace(" ", "_")
 artistName = str(chosenTrack["artist"]["name"]).replace(" ", "_")
 
 # Make the folder
-os.mkdir(path)
+# os.mkdir(path)
 
 print("Downlading song...")
 
@@ -128,14 +128,14 @@ os.remove(f"{path}/{songName}.mp4")
 coverImg = chosenTrack["album"]["cover_big"]
 # This will save the cover image as "./Downloads/ARTISTNAME-SONGNAME-COVER.jpg"
 # Example - ./Downloads/Avicii-Waiting_for_love-cover.jpg
-urllib.request.urlretrieve(coverImg, f"{path}/{artistName}-{songName}-cover.jpg")
+urllib.request.urlretrieve(coverImg, f"{path}/albumCover/{artistName}-{songName}-cover.jpg")
 
 print("Downloading complete!")
 
 # This asks the user if they want to play the song
-playQue = input("Play song? (y/n) : ").lower()
-if playQue == "y":
-    # If yes, we use their web browser (chrome, firefox, edge etc.) to play the mp3 file
-    webbrowser.open(f"{path}/{artistName}-{songName}.mp3")
-else:
-    pass
+# playQue = input("Play song? (y/n) : ").lower()
+# if playQue == "y":
+#     # If yes, we use their web browser (chrome, firefox, edge etc.) to play the mp3 file
+#     webbrowser.open(f"{path}/{artistName}-{songName}.mp3")
+# else:
+#     pass

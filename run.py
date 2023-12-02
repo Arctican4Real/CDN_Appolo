@@ -3,8 +3,13 @@ import pygame
 from PIL import ImageTk,Image
 import os
 
+bgBlack = "#171D1C"
+fgWhite = "#EFE9F4"
+AccentBlue = "#3695F5"
+
 screen = Tk()
 screen.title("Melodia")
+screen.configure(bg=bgBlack)
 
 #Works for windows
 #screen.iconbitmap("")
@@ -13,7 +18,7 @@ screen.title("Melodia")
 img = PhotoImage(file='./sources/icon.gif')
 screen.tk.call('wm', 'iconphoto', screen._w, img)
 screen.iconphoto(True, img)
-#screen.resizable(0,0)
+screen.resizable(0,0)
 
 pygame.mixer.init()
 
@@ -148,8 +153,10 @@ def nextTrack(move):
 
 #     mainBtnFunc(0)
 
-trackBox = Listbox(screen, bg="white",fg="blue",width=30, height=5)
+trackBox = Listbox(screen, bg="#171D1C",fg=fgWhite,width=30, height=5,borderwidth=0, highlightthickness=0,  selectbackground=AccentBlue, selectborderwidth=0)
 trackBox.activate(0)
+# trackBox.selection_set( first = 0 )
+# trackBox.select_set(0)
 
 global tracks
 tracks = []
@@ -177,18 +184,18 @@ curCover = Image.open(albumCover)
 curCover = curCover.resize((250,250), Image.ANTIALIAS)
 curCover = ImageTk.PhotoImage(curCover)
 
-curCoverLabel = Label(image=curCover)
+curCoverLabel = Label(image=curCover,borderwidth=0,highlightthickness = 0)
 curCoverLabel.pack(pady=20)
 
 trackBox.pack()
 
-btnDiv = Frame(screen)
+btnDiv = Frame(screen, bg=bgBlack, pady=10, bd=0)
 btnDiv.pack()
 
-mainBtn = Button(btnDiv, image=playBtnImg , borderwidth=0, command=lambda:mainBtnFunc(playState))
-stopBtn = Button(btnDiv, image=stopBtnImg , borderwidth=0, command=stop)
-backBtn = Button(btnDiv, image=backBtnImg , borderwidth=0, command=lambda:nextTrack(-1))
-frontBtn = Button(btnDiv, image=frontBtnImg , borderwidth=0, command=lambda:nextTrack(1))
+mainBtn = Button(btnDiv, image=playBtnImg , borderwidth=0, command=lambda:mainBtnFunc(playState),bg=bgBlack,highlightthickness = 0, bd = 0)
+stopBtn = Button(btnDiv, image=stopBtnImg , borderwidth=0, command=stop,bg=bgBlack,highlightthickness = 0, bd = 0)
+backBtn = Button(btnDiv, image=backBtnImg , borderwidth=0, command=lambda:nextTrack(-1),bg=bgBlack,highlightthickness = 0, bd = 0)
+frontBtn = Button(btnDiv, image=frontBtnImg , borderwidth=0, command=lambda:nextTrack(1),bg=bgBlack,highlightthickness = 0, bd = 0)
 
 backBtn.grid(row=0,column=0, padx=20)
 mainBtn.grid(row=0,column=1, padx=20)
