@@ -14,14 +14,8 @@ screen = Tk()
 screen.title("Melodia")
 screen.configure(bg=bgBlack)
 
-# Set window icon (works differently on Windows and Linux)
-
-# For windows:
-# screen.iconbitmap("./sources/icon.ico")
-
-# Works for linux
+# Import and display program icon
 img = PhotoImage(file="./sources/icon.gif")
-
 screen.tk.call("wm", "iconphoto", screen._w, img)
 screen.iconphoto(True, img)
 
