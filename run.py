@@ -129,7 +129,7 @@ def changeCover(trackNum):
     albumCover = tracks[trackNum].replace(".mp3", "")
     albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
     curCover = Image.open(albumCover)
-    curCover = curCover.resize((250, 250), Image.ANTIALIAS)
+    curCover = curCover.resize((250, 250), Image.LANCZOS)
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
