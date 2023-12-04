@@ -69,6 +69,9 @@ def mainBtnFunc(mainQuery):
         pygame.mixer.music.play(loops=0)
         playState = 1
         changeCover(trackIndex)
+
+        mainBtn.configure(image=pauseBtnImg)
+        mainBtn.photo = pauseBtnImg
     
     # If the play state is 1 (playing)
     elif playState == 1:
