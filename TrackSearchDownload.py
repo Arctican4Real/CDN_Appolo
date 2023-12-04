@@ -26,8 +26,14 @@ import shutil
 import urllib
 
 # Custom file that has passcode for API
-from passcode import *
 
+try :
+    from passcode import *
+except :
+    print("FATAL ERROR :")
+    print("Uh Oh! You don't have an API key, so I can't access Deezer!")
+    print("Did you copy passcode.py into the main folder?")
+    raise SystemExit(0)
 # Log into deezer with our app id (username) and password(app secret)
 client = deezer.Client(
     app_id=app_id,
