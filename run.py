@@ -172,7 +172,7 @@ albumCover = tracks[0].replace(".mp3", "")
 albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
 global curCover
 curCover = Image.open(albumCover)
-curCover = curCover.resize((250, 250), Image.ANTIALIAS)
+curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
 # Create a label to display the album cover
