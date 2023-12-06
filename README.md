@@ -4,7 +4,7 @@
 
 ## Project Description
 
-This project aims to create a feature-rich music streaming application that effectively serves as a Spotify clone, providing users with a wide range of functionalities.The application will enable users to:  
+This project aims to create a feature-rich music streaming application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:  
 
 - Search for songs ✓
 - Download Songs ✓
@@ -33,12 +33,16 @@ The initial release will be a desktop application, with potential plans for futu
 - Add option to search both tracks or album
 - Implement simple way to download all dependencies
 - Connect music GUI to Download feature
-- Complete music plater functions
+- Complete music player functions
 - Add secret features
 - Further stylize GUI
+
+### Currently Working On
+- Slider, Autoplay, Themes, Loops, Scroll Bar
+- Database for songs
+- Download app GUI
 
 ### Contributors
 - Adeeb
 - Shubham
 - Nazia
-- ~~Jigisha~~
