@@ -21,6 +21,7 @@ screen.iconphoto(True, img)
 
 # Set window properties
 screen.resizable(0, 0)
+#Default 330x500
 screen.geometry("330x500")
 
 # Initialize the Pygame mixer
@@ -36,6 +37,11 @@ backBtnImg = PhotoImage(file="./sources/ctrlbtn/back.png")
 # Initialize global variable for play state
 global playState
 playState = 0
+
+# Function to change name of track
+def changeName():
+    name = tracks[0].replace(".mp3", "")
+    name = name.replace("_", " ")
 
 # Function to stop the music
 def stop():
@@ -177,7 +183,14 @@ curCover = ImageTk.PhotoImage(curCover)
 
 # Create a label to display the album cover
 curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=0)
-curCoverLabel.pack(pady=20)
+curCoverLabel.pack(pady=10)
+
+# Text box for song length
+name = tracks[0].replace(".mp3", "")
+name = name.replace("_", " ")
+
+dur = Label(screen, text=name, bd=1, )
+dur.pack(fill=X, ipady=5, pady=5)
 
 # Pack the listbox (Under the cover)
 trackBox.pack()
