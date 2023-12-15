@@ -40,8 +40,9 @@ playState = 0
 
 # Function to change name of track
 def changeName():
-    name = tracks[0].replace(".mp3", "")
+    name = trackBox.get(ACTIVE)
     name = name.replace("_", " ")
+    curTitle.configure(text=name)
 
 # Function to stop the music
 def stop():
@@ -78,6 +79,9 @@ def mainBtnFunc(mainQuery):
 
         mainBtn.configure(image=pauseBtnImg)
         mainBtn.photo = pauseBtnImg
+
+        # Change the current title name
+        changeName()
     
     # If the play state is 1 (playing)
     elif playState == 1:
@@ -96,7 +100,6 @@ def mainBtnFunc(mainQuery):
         playState = 1
         mainBtn.configure(image=pauseBtnImg)
         mainBtn.photo = pauseBtnImg
-
 
 # Function to play the next or previous track
 def nextTrack(move):
@@ -131,6 +134,9 @@ def nextTrack(move):
     # Reset play state and simulate a button click to start playing the new track
     playState = 0
     mainBtnFunc(0)
+
+    # Change the current title name
+    changeName()
 
 # Function to change the album cover image based on the selected track
 def changeCover(trackNum):
@@ -189,8 +195,11 @@ curCoverLabel.pack(pady=10)
 name = tracks[0].replace(".mp3", "")
 name = name.replace("_", " ")
 
-dur = Label(screen, text=name, bd=1, )
-dur.pack(fill=X, ipady=5, pady=5)
+curTitle = Label(screen, text=name, bd=1)
+curTitle.pack(fill=X, ipady=5, pady=5)
+curTime = Label(screen, text="00:00")
+curTime.pack()
+
 
 # Pack the listbox (Under the cover)
 trackBox.pack()
