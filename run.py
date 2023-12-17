@@ -69,7 +69,6 @@ def changeDur():
     # :::PIGGYBACK:::
     #If the song ended, autoplay
     if convCurrentDur==convTotLen:
-        time.sleep(1)
         nextTrack(1)
 
 
