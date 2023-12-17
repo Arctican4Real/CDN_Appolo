@@ -3,11 +3,13 @@ from tkinter import *
 import pygame
 from PIL import ImageTk, Image
 import os
+import time
+from mutagen.mp3 import MP3
 
 # Define color constants
 bgBlack = "#171D1C"
 fgWhite = "#EFE9F4"
-AccentBlue = "#3695F5"
+accentBlue = "#3695F5"
 
 # Create the main Tkinter window
 screen = Tk()
@@ -22,7 +24,7 @@ screen.iconphoto(True, img)
 # Set window properties
 screen.resizable(0, 0)
 #Default 330x500
-screen.geometry("330x500")
+screen.geometry("330x550")
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
@@ -37,6 +39,46 @@ backBtnImg = PhotoImage(file="./sources/ctrlbtn/back.png")
 # Initialize global variable for play state
 global playState
 playState = 0
+
+# Function to change song duration
+def changeDur():
+    global tracks
+    #Grab current time, edit the duration text (as integer)
+    currentDur = pygame.mixer.music.get_pos()/1000
+
+    #Sometimes there is a error when song is played, so fix it
+    if currentDur < 0:
+        currentDur = 0
+
+    #Convert it into proper format
+    convCurrentDur = time.strftime("%M:%S", time.gmtime(currentDur))
+
+    #::: Getting the total time :::
+
+    # Get file path of currently playing song
+    track = trackBox.get(ACTIVE)    
+    track = track.replace(" ", "_")
+    curTrack = f"./music/{track}.mp3"
+
+    #Read song length with mutagen
+    songMutagen = MP3(curTrack)
+    songLength= songMutagen.info.length
+    #Convert to proper format
+    convTotLen = time.strftime("%M:%S", time.gmtime(songLength))
+
+    # :::PIGGYBACK:::
+    #If the song ended, autoplay
+    if convCurrentDur==convTotLen:
+        time.sleep(1)
+        nextTrack(1)
+
+
+    #Change text 
+    durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
+
+    #Run this again and again after 1 second
+    durLabel.after(1000,changeDur)
+
 
 # Function to change name of track
 def changeName():
@@ -61,6 +103,9 @@ def mainBtnFunc(mainQuery):
     
     # If the play state is 0 (initial or stopped)
     if playState == 0:
+        #Run the song duration fucntion when first played
+        changeDur() 
+
         # Pause the music (if playing), print a message, and get the selected track
         pygame.mixer.music.pause()
         print("Play pressed first time")
@@ -104,7 +149,7 @@ def mainBtnFunc(mainQuery):
 # Function to play the next or previous track
 def nextTrack(move):
     global playState
-    
+
     # Get the index of the currently selected track in the listbox
     curTrack = trackBox.curselection()[0]
     
@@ -151,13 +196,13 @@ def changeCover(trackNum):
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
-    bg="#171D1C",
+    bg=bgBlack,
     fg=fgWhite,
     width=30,
     height=5,
     borderwidth=0,
     highlightthickness=0,
-    selectbackground=AccentBlue,
+    selectbackground=accentBlue,
     selectborderwidth=0,
 )
 
@@ -191,15 +236,29 @@ curCover = ImageTk.PhotoImage(curCover)
 curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=0)
 curCoverLabel.pack(pady=10)
 
+# Display the song duration
+durLabel = Label(
+    screen, 
+    text="00:00",
+    borderwidth=0,
+    highlightthickness=0,
+    bd=0,
+    bg=bgBlack,
+    fg=fgWhite,
+    width=20,
+    height=1,
+    font=("Arial", 16)
+    )
+
+durLabel.pack()
+
 # Text box for song length
 name = tracks[0].replace(".mp3", "")
 name = name.replace("_", " ")
 
-curTitle = Label(screen, text=name, bd=1)
-curTitle.pack(fill=X, ipady=5, pady=5)
-curTime = Label(screen, text="00:00")
-curTime.pack()
-
+# Display the current song name
+curTitle = Label(screen, text=name, bd=1, bg=accentBlue, fg=bgBlack)
+curTitle.pack(fill=X, ipady=5, pady=10)
 
 # Pack the listbox (Under the cover)
 trackBox.pack()
