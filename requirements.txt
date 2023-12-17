@@ -1,7 +1,7 @@
 moviepy==1.0.3
+mutagen==1.45.1
 Pillow==10.1.0
 pygame==2.5.2
 pytube==15.0.0
 Requests==2.31.0
-deezer-python==6.1.1 
-Pillow==10.1.0 
+deezer-python==6.1.1  
