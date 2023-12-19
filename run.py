@@ -23,7 +23,7 @@ screen.iconphoto(True, img)
 
 # Set window properties
 screen.resizable(0, 0)
-#Default 330x500
+#Default 330x550
 screen.geometry("330x550")
 
 # Initialize the Pygame mixer
@@ -36,11 +36,17 @@ stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stop.png")
 frontBtnImg = PhotoImage(file="./sources/ctrlbtn/front.png")
 backBtnImg = PhotoImage(file="./sources/ctrlbtn/back.png")
 
-# Initialize global variable for play state
+# Initialize global variable for play state, as well as what play state means
 global playState
-playState = 0
+SONG_NOT_PLAYING = 0
+SONG_IS_PLAYING = 1
+SONG_IS_PAUSED = 2
 
-# Function to change song duration
+# Initially, we dont want teh song to be playing
+playState = SONG_NOT_PLAYING
+
+
+# Function to change song duration (and auto play)
 def changeDur():
     global tracks
     #Grab current time, edit the duration text (as integer)
@@ -78,11 +84,10 @@ def changeDur():
     #Run this again and again after 1 second
     durLabel.after(1000,changeDur)
 
-
 # Function to change name of track
 def changeName():
-    name = trackBox.get(ACTIVE)
-    name = name.replace("_", " ")
+    currentPlaying = trackBox.get(ACTIVE)
+    name = getSongName(currentPlaying)
     curTitle.configure(text=name)
 
 # Function to stop the music
@@ -90,10 +95,11 @@ def stop():
     print("Stop pressed")
     pygame.mixer.music.stop()
     global playState
-    playState = 0
+    playState = SONG_NOT_PLAYING
     mainBtn.configure(image=playBtnImg)
     mainBtn.photo = playBtnImg
 
+#A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
     global playState, tracks
     
@@ -101,7 +107,7 @@ def mainBtnFunc(mainQuery):
     mainQuery = playState
     
     # If the play state is 0 (initial or stopped)
-    if playState == 0:
+    if playState == SONG_NOT_PLAYING:
         #Run the song duration fucntion when first played
         changeDur() 
 
@@ -118,7 +124,7 @@ def mainBtnFunc(mainQuery):
         # Load and play the selected track, update play state, and change album cover
         pygame.mixer.music.load(track)
         pygame.mixer.music.play(loops=0)
-        playState = 1
+        playState = SONG_IS_PLAYING
         changeCover(trackIndex)
 
         mainBtn.configure(image=pauseBtnImg)
@@ -128,20 +134,20 @@ def mainBtnFunc(mainQuery):
         changeName()
     
     # If the play state is 1 (playing)
-    elif playState == 1:
+    elif playState == SONG_IS_PLAYING:
         # Pause the music, print a message, update play state, and change button image
         pygame.mixer.music.pause()
         print("Paused")
-        playState = 2
+        playState = SONG_IS_PAUSED
         mainBtn.configure(image=playBtnImg)
         mainBtn.photo = playBtnImg
     
     # If the play state is 2 (paused)
-    else:
+    elif playState == SONG_IS_PAUSED:
         # Unpause the music, print a message, update play state, and change button image
         pygame.mixer.music.unpause()
         print("Unpaused")
-        playState = 1
+        playState = SONG_IS_PLAYING
         mainBtn.configure(image=pauseBtnImg)
         mainBtn.photo = pauseBtnImg
 
@@ -192,6 +198,25 @@ def changeCover(trackNum):
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
+# Function to get song name
+def getSongName(path):
+    name = path.replace(".mp3", "")
+    name = name.replace("_", " ")
+    return name
+
+# Function to get song path
+def getSongPath(name):
+    name = name.replace(" ", "_")
+    path = f"./music/{name}.mp3"
+    return path
+
+# Function to get song album path
+def getSongCov(name):
+    path = name.replace(".mp3", "")
+    path = path.replace(" ", "_")
+    path = f"./music/albumCover/{path}-cover.jpg"
+    return path
+
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
@@ -207,6 +232,7 @@ trackBox = Listbox(
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
+trackBox.selection_set(0)
 
 # Fetch list of tracks
 global tracks
@@ -224,8 +250,10 @@ for name in tracks:
     trackBox.insert("end", name)
 
 # Load the initial album cover
-albumCover = tracks[0].replace(".mp3", "")
-albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
+# albumCover = tracks[0].replace(".mp3", "")
+# albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
+
+albumCover = getSongCov(trackBox.get(0))
 global curCover
 curCover = Image.open(albumCover)
 curCover = curCover.resize((250, 250), Image.LANCZOS)
@@ -252,11 +280,10 @@ durLabel = Label(
 durLabel.pack()
 
 # Text box for song length
-name = tracks[0].replace(".mp3", "")
-name = name.replace("_", " ")
+firstTrack = getSongName(trackBox.get(0))
 
 # Display the current song name
-curTitle = Label(screen, text=name, bd=1, bg=accentBlue, fg=bgBlack)
+curTitle = Label(screen, text=firstTrack, bd=1, bg=accentBlue, fg=bgBlack)
 curTitle.pack(fill=X, ipady=5, pady=10)
 
 # Pack the listbox (Under the cover)
