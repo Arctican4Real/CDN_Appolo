@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 import os
 import time
 from mutagen.mp3 import MP3
+import tkinter.ttk as ttk
 
 # Define color constants
 bgBlack = "#171D1C"
@@ -77,9 +78,9 @@ def changeDur():
     if convCurrentDur==convTotLen:
         nextTrack(1)
 
-
     #Change text 
     durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
+
 
     #Run this again and again after 1 second
     durLabel.after(1000,changeDur)
@@ -278,6 +279,17 @@ durLabel = Label(
     )
 
 durLabel.pack()
+
+# Slider for song duration
+slider = ttk.Scale(
+    screen,
+    from_=0, 
+    to=100,
+    orient=HORIZONTAL,
+    value=0,
+    length = 330
+    )
+slider.pack(pady=20)
 
 # Text box for song length
 firstTrack = getSongName(trackBox.get(0))
