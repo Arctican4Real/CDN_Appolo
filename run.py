@@ -78,6 +78,9 @@ def changeDur():
     # Update the slider position
     slider.config(value = int(currentDur))
 
+    # Just for debug
+    print(f"{int(slider.get())} of {int(currentDur)}")
+
     #Run this again and again after 1 second
     durLabel.after(1000,changeDur)
 
@@ -109,6 +112,8 @@ def stop():
     playState = SONG_NOT_PLAYING
     mainBtn.configure(image=playBtnImg)
     mainBtn.photo = playBtnImg
+    slider.config(to_=songLengthGrabber(), value=0)
+
 
 #A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
@@ -233,7 +238,8 @@ def getSongCov(name):
 
 #slider function
 def slide(x):
-    print(int(slider.get()))
+    currentDur = pygame.mixer.music.get_pos()/1000
+    #print(f"{int(slider.get())} of {int(currentDur)}")
 
 # Create a listbox to display tracks
 trackBox = Listbox(
