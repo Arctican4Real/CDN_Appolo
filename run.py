@@ -25,7 +25,7 @@ screen.iconphoto(True, img)
 # Set window properties
 screen.resizable(0, 0)
 #Default 330x550
-screen.geometry("330x550")
+screen.geometry("330x630")
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
@@ -61,17 +61,11 @@ def changeDur():
     convCurrentDur = time.strftime("%M:%S", time.gmtime(currentDur))
 
     #::: Getting the total time :::
+    songLen = (songLengthGrabber())
 
-    # Get file path of currently playing song
-    track = trackBox.get(ACTIVE)    
-    track = track.replace(" ", "_")
-    curTrack = f"./music/{track}.mp3"
+    #Convert again
+    convTotLen = time.strftime("%M:%S", time.gmtime(songLen))
 
-    #Read song length with mutagen
-    songMutagen = MP3(curTrack)
-    songLength= songMutagen.info.length
-    #Convert to proper format
-    convTotLen = time.strftime("%M:%S", time.gmtime(songLength))
 
     # :::PIGGYBACK:::
     #If the song ended, autoplay
@@ -81,9 +75,25 @@ def changeDur():
     #Change text 
     durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
 
+    # Update the slider position
+    slider.config(value = int(currentDur))
 
     #Run this again and again after 1 second
     durLabel.after(1000,changeDur)
+
+# Get length of song length
+def songLengthGrabber():
+    # Get file path of currently playing song
+    track = trackBox.get(ACTIVE)    
+    # track = track.replace(" ", "_")
+    # curTrack = f"./music/{track}.mp3"
+    track = getSongPath(track)
+
+    #Read song length with mutagen
+    songMutagen = MP3(track)
+    songLength= songMutagen.info.length
+    #Convert to proper format
+    return songLength
 
 # Function to change name of track
 def changeName():
@@ -133,6 +143,9 @@ def mainBtnFunc(mainQuery):
 
         # Change the current title name
         changeName()
+
+        # Change the position and size of slider
+        slider.config(to_=songLengthGrabber(), value=0)
     
     # If the play state is 1 (playing)
     elif playState == SONG_IS_PLAYING:
@@ -218,6 +231,10 @@ def getSongCov(name):
     path = f"./music/albumCover/{path}-cover.jpg"
     return path
 
+#slider function
+def slide(x):
+    print(int(slider.get()))
+
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
@@ -287,7 +304,8 @@ slider = ttk.Scale(
     to=100,
     orient=HORIZONTAL,
     value=0,
-    length = 330
+    length = 330,
+    command = slide
     )
 slider.pack(pady=20)
 
