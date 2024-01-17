@@ -82,7 +82,9 @@ def changeDur():
     print(f"{int(slider.get())} of {int(currentDur)}")
 
     #Run this again and again after 1 second
-    durLabel.after(1000,changeDur)
+    print(playState)
+    if playState == SONG_IS_PLAYING:
+        durLabel.after(1000,changeDur)
 
 # Get length of song length
 def songLengthGrabber():
@@ -124,9 +126,6 @@ def mainBtnFunc(mainQuery):
     
     # If the play state is 0 (initial or stopped)
     if playState == SONG_NOT_PLAYING:
-        #Run the song duration fucntion when first played
-        changeDur() 
-
         # Pause the music (if playing), print a message, and get the selected track
         pygame.mixer.music.pause()
         print("Play pressed first time")
@@ -151,6 +150,9 @@ def mainBtnFunc(mainQuery):
 
         # Change the position and size of slider
         slider.config(to_=songLengthGrabber(), value=0)
+
+        #Run the song duration fucntion when first played
+        changeDur() 
     
     # If the play state is 1 (playing)
     elif playState == SONG_IS_PLAYING:
