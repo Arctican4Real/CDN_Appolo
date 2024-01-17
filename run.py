@@ -81,7 +81,7 @@ def changeDur():
     #print(playState)
 
     #Small bug where current dur is not responsive of the first second
-    #currentDur+=2
+    currentDur+=1
 
     # Change the position and size of slider
     slider.config(to_ =songLen,value=int(slider.get()))
@@ -397,9 +397,9 @@ slider = ttk.Scale(
     orient=HORIZONTAL,
     value=0,
     length = 330,
-    command = slide
+    command = slide,
     )
-slider.pack(pady=20)
+slider.pack(pady=20, padx=20)
 
 # Text box for song length
 firstTrack = getSongName(trackBox.get(0))
