@@ -124,7 +124,7 @@ def changeDur():
         Moving to the next song doesnt allow this loop to end.
         It double loops!
 
-        Dont really know how to fix this
+        Dont really know how to fix this...
         """
 
     #Run this again and again after 1 second
