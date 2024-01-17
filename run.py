@@ -84,6 +84,10 @@ def changeDur():
         #Show that the song is complete
         durLabel.config(text=f"{convTotLen} / {convTotLen}")
 
+    #Else, if its paused, we dont want to do anything
+    elif playState == SONG_IS_PAUSED:
+        pass
+
     #If the slider hasnt moved        
     elif int(slider.get()) == int(currentDur):
         print("SLIDER HASNT MOVED")
@@ -107,8 +111,8 @@ def changeDur():
         slider.config(value=(slider.get()+1))
 
     #Run this again and again after 1 second
-    if playState == SONG_IS_PLAYING:
-        durLabel.after(1000,changeDur)
+    # if playState == SONG_IS_PLAYING:
+    durLabel.after(1000,changeDur)
 
 # Get length of song length
 def songLengthGrabber():
