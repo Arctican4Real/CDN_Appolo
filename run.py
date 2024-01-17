@@ -77,8 +77,11 @@ def changeDur():
     #slider.config(value = int(currentDur))
 
     # Just for debug
-    print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
+    #print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
     #print(playState)
+
+    #Small bug where current dur is not responsive of the first second
+    currentDur+=1
 
     # Change the position and size of slider
     slider.config(value=int(slider.get()))
@@ -101,6 +104,7 @@ def changeDur():
         # Change the position of the slider to the current position
         slider.config(to_=songLengthGrabber(), value=int(currentDur))
 
+
     else:
         print("SLIDER HAS MOVED")
        
@@ -114,6 +118,14 @@ def changeDur():
 
         #Manually move the slider
         slider.config(value=(slider.get()+1))
+
+        ###ERROR HERE###
+        """
+        Moving to the next song doesnt allow this loop to end.
+        It double loops!
+
+        Dont really know how to fix this
+        """
 
     #Run this again and again after 1 second
     # if playState == SONG_IS_PLAYING:
@@ -142,12 +154,20 @@ def changeName():
 # Function to stop the music
 def stop():
     print("Stop pressed")
+
+    #Stop the song in mixer
     pygame.mixer.music.stop()
+
+    #Change playState
     global playState
     playState = SONG_NOT_PLAYING
+
+    #Change all GUI elements
     mainBtn.configure(image=playBtnImg)
     mainBtn.photo = playBtnImg
     slider.config(value=0)
+    durLabel.config(text=f"00:00")
+
 
 
 #A function that controls teh working of the main play button
@@ -203,6 +223,9 @@ def mainBtnFunc(mainQuery):
 
 # Function to play the next or previous track
 def nextTrack(move):
+    #Stop the currently playing song
+    stop()
+
     global playState
 
     # Get the index of the currently selected track in the listbox
@@ -235,9 +258,6 @@ def nextTrack(move):
     I'll fix this soon
 
     """
-
-    #Stop the currently playing song
-
 
     trackBox.selection_clear(0, END)
     trackBox.activate(nextTrack)
@@ -312,6 +332,13 @@ trackBox.activate(0)
 trackBox.selection_set(0)
 
 # Fetch list of tracks
+
+###ERROR HERE###
+"""
+Tries to load all the songs. But on the first attempt, there wont be any songs!
+This needs to be fixed with some form of exception
+"""
+
 global tracks
 tracks = []
 for name in os.listdir("./music"):
