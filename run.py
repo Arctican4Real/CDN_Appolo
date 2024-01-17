@@ -77,14 +77,14 @@ def changeDur():
     #slider.config(value = int(currentDur))
 
     # Just for debug
-    #print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
+    print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
     #print(playState)
 
     #Small bug where current dur is not responsive of the first second
-    currentDur+=1
+    #currentDur+=2
 
     # Change the position and size of slider
-    slider.config(value=int(slider.get()))
+    slider.config(to_ =songLen,value=int(slider.get()))
 
     #If the song has finished playing
     if int(slider.get()) == int(songLen):
@@ -129,7 +129,8 @@ def changeDur():
 
     #Run this again and again after 1 second
     # if playState == SONG_IS_PLAYING:
-    durLabel.after(1000,changeDur)
+    global secLoop
+    secLoop = screen.after(1000,changeDur)
 
 # Get length of song length
 def songLengthGrabber():
@@ -153,10 +154,15 @@ def changeName():
 
 # Function to stop the music
 def stop():
+    global secLoop
+
     print("Stop pressed")
 
     #Stop the song in mixer
     pygame.mixer.music.stop()
+
+    #Cancel the currently playing job
+    screen.after_cancel(secLoop)
 
     #Change playState
     global playState
