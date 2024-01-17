@@ -51,6 +51,11 @@ playState = SONG_NOT_PLAYING
 def changeDur():
     global tracks
     global playState
+
+    #If the song is stopped, dont do all this
+    if playState == SONG_NOT_PLAYING:
+        return
+
     #Grab current time, edit the duration text (as integer)
     currentDur = pygame.mixer.music.get_pos()/1000
 
@@ -142,7 +147,7 @@ def stop():
     playState = SONG_NOT_PLAYING
     mainBtn.configure(image=playBtnImg)
     mainBtn.photo = playBtnImg
-    slider.config(to_=songLengthGrabber(), value=0)
+    slider.config(value=0)
 
 
 #A function that controls teh working of the main play button
@@ -225,7 +230,7 @@ def nextTrack(move):
     This probably wears down the system, and isn't efficient!
 
     This can be fixed by ACTUALLY stopping the song then playing the new one,
-    instead of just changing the selected song (cheaty!)
+    instead of just changing the selected song (cuz thats too ez / cheaty!)
 
     I'll fix this soon
 
