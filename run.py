@@ -68,20 +68,43 @@ def changeDur():
     convTotLen = time.strftime("%M:%S", time.gmtime(songLen))
 
 
-    # :::PIGGYBACK:::
-    #If the song ended, autoplay
-    if convCurrentDur==convTotLen:
-        nextTrack(1)
-
-    #Change text 
-    durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
-
-    # Update the slider position
-    slider.config(value = int(currentDur))
+    # Update the slider position REDUNDANT
+    #slider.config(value = int(currentDur))
 
     # Just for debug
     print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
     #print(playState)
+
+    # Change the position and size of slider
+    slider.config(value=int(slider.get()))
+
+    #If the song has finished playing
+    if int(slider.get()) == int(songLen):
+        #nextTrack(1)
+        #Show that the song is complete
+        durLabel.config(text=f"{convTotLen} / {convTotLen}")
+
+    #If the slider hasnt moved        
+    elif int(slider.get()) == int(currentDur):
+        print("SLIDER HASNT MOVED")
+        #Change text 
+        durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
+        # Change the position of the slider to the current position
+        slider.config(to_=songLengthGrabber(), value=int(currentDur))
+
+    else:
+        print("SLIDER HAS MOVED")
+       
+        #We need the position of the slider in time format
+        sliderConv = time.strftime("%M:%S", time.gmtime(int(slider.get())))
+
+        durLabel.config(text=f"{sliderConv} / {convTotLen}")
+
+        # Change the position of the song to the current slider position
+        # slider.config(to_=songLengthGrabber(), value=int(currentDur))
+
+        #Manually move the slider
+        slider.config(value=(slider.get()+1))
 
     #Run this again and again after 1 second
     if playState == SONG_IS_PLAYING:
@@ -147,10 +170,6 @@ def mainBtnFunc(mainQuery):
 
         # Change the current title name
         changeName()
-
-        # Change the position and size of slider
-        slider.config(to_=songLengthGrabber(), value=0)
-
 
         #Run the song duration fucntion when first played
         changeDur() 
@@ -256,13 +275,15 @@ def getSongCov(name):
 
 #slider function
 def slide(pos):
-    # Modify track name for file path and find its index in the tracks list
-    # track = trackBox.get(ACTIVE)
-    # track = getSongPath(track)
+    track = trackBox.get(ACTIVE)
+    track = getSongPath(track)
     # # Load and play the selected track, update play state, and change album cover
-    # pygame.mixer.music.load(track)
-    curPos = slider.get()
+    pygame.mixer.music.load(track)
+    
+    curPos = slider.get() 
     pygame.mixer.music.play(loops=0,start=int(curPos))
+    slider.config(value=curPos)
+    pass
 
 # Create a listbox to display tracks
 trackBox = Listbox(
