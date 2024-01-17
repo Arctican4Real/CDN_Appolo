@@ -81,9 +81,9 @@ def changeDur():
 
     # Just for debug
     print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
+    #print(playState)
 
     #Run this again and again after 1 second
-    print(playState)
     if playState == SONG_IS_PLAYING:
         durLabel.after(1000,changeDur)
 
@@ -133,8 +133,7 @@ def mainBtnFunc(mainQuery):
         track = trackBox.get(ACTIVE)
         
         # Modify track name for file path and find its index in the tracks list
-        track = track.replace(" ", "_")
-        track = f"./music/{track}.mp3"
+        track= getSongPath(track)
         trackIndex = tracks.index(track.replace("./music/", ""))
         
         # Load and play the selected track, update play state, and change album cover
@@ -151,6 +150,7 @@ def mainBtnFunc(mainQuery):
 
         # Change the position and size of slider
         slider.config(to_=songLengthGrabber(), value=0)
+
 
         #Run the song duration fucntion when first played
         changeDur() 
@@ -188,14 +188,29 @@ def nextTrack(move):
     else:
         nextTrack = trackBox.curselection()[0] + move
     
-    # Print the index of the current song
-    print("Current song is number", nextTrack)
-    
+    # Print the index of the current song (Debug)
+    #print("Current song is number", nextTrack)
+
     # Get the name of the next track, modify for file path, and update listbox selection
     playTrack = trackBox.get(nextTrack)
-    playTrack = playTrack.replace(" ", "_")
-    playTrack = f"./music/{playTrack}.mp3"
-    
+    playTrack= getSongPath(playTrack)
+
+    """
+    ### INTERNAL ERROR HERE ###
+    The previous song is not internally stopped before the next song is started.
+    So internally, it runs the code for calculating time of the previous song as well as new song.
+    This probably wears down the system, and isn't efficient!
+
+    This can be fixed by ACTUALLY stopping the song then playing the new one,
+    instead of just changing the selected song (cheaty!)
+
+    I'll fix this soon
+
+    """
+
+    #Stop the currently playing song
+
+
     trackBox.selection_clear(0, END)
     trackBox.activate(nextTrack)
     trackBox.selection_set(nextTrack, last=None)
@@ -241,7 +256,13 @@ def getSongCov(name):
 
 #slider function
 def slide(pos):
-    print(pos)
+    # Modify track name for file path and find its index in the tracks list
+    # track = trackBox.get(ACTIVE)
+    # track = getSongPath(track)
+    # # Load and play the selected track, update play state, and change album cover
+    # pygame.mixer.music.load(track)
+    curPos = slider.get()
+    pygame.mixer.music.play(loops=0,start=int(curPos))
 
 # Create a listbox to display tracks
 trackBox = Listbox(
