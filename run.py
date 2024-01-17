@@ -50,6 +50,7 @@ playState = SONG_NOT_PLAYING
 # Function to change song duration (and auto play)
 def changeDur():
     global tracks
+    global playState
     #Grab current time, edit the duration text (as integer)
     currentDur = pygame.mixer.music.get_pos()/1000
 
@@ -79,7 +80,7 @@ def changeDur():
     slider.config(value = int(currentDur))
 
     # Just for debug
-    print(f"{int(slider.get())} of {int(currentDur)}")
+    print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
 
     #Run this again and again after 1 second
     durLabel.after(1000,changeDur)
@@ -237,9 +238,8 @@ def getSongCov(name):
     return path
 
 #slider function
-def slide(x):
-    currentDur = pygame.mixer.music.get_pos()/1000
-    #print(f"{int(slider.get())} of {int(currentDur)}")
+def slide(pos):
+    print(pos)
 
 # Create a listbox to display tracks
 trackBox = Listbox(
