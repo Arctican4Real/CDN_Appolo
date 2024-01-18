@@ -91,6 +91,7 @@ def changeDur():
         #nextTrack(1)
         #Show that the song is complete
         durLabel.config(text=f"{convTotLen} / {convTotLen}")
+        stop()
 
     #Else, if its paused, we dont want to do anything
     elif playState == SONG_IS_PAUSED:
@@ -310,15 +311,17 @@ def getSongCov(name):
 
 #slider function
 def slide(pos):
-    track = trackBox.get(ACTIVE)
-    track = getSongPath(track)
-    # # Load and play the selected track, update play state, and change album cover
-    pygame.mixer.music.load(track)
-    
-    curPos = slider.get() 
-    pygame.mixer.music.play(loops=0,start=int(curPos))
-    slider.config(value=curPos)
-    pass
+    if playState != SONG_IS_PLAYING:
+        pass
+    else:
+        track = trackBox.get(ACTIVE)
+        track = getSongPath(track)
+        # # Load and play the selected track, update play state, and change album cover
+        pygame.mixer.music.load(track)
+        
+        curPos = slider.get() 
+        pygame.mixer.music.play(loops=0,start=int(curPos))
+        slider.config(value=curPos)
 
 # Create a listbox to display tracks
 trackBox = Listbox(
@@ -452,6 +455,11 @@ frontBtn = Button(
     highlightthickness=0,
     bd=0,
 )
+
+# img_6 = img_6.resize((45, 45))
+# img_6 = ImageTk.PhotoImage(img_6)
+# stop_image = Button(down_frame, width=40, height=40, image=img_6, padx=10, font=("Ivy 10"))
+# stop_image.place(x=194+28, y=35)
 
 # Grid layout for control buttons
 backBtn.grid(row=0, column=0, padx=20)
