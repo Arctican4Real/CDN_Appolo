@@ -1,3 +1,10 @@
+#TODO
+"""
+Auto play feature w/button
+Open folder feature
+Color Schemes (?)
+"""
+
 # Import necessary libraries
 from tkinter import *
 import pygame
@@ -77,8 +84,8 @@ def changeDur():
     #slider.config(value = int(currentDur))
 
     # Just for debug
-    print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
-    #print(playState)
+    #print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
+    ##print(playState)
 
     #Small bug where current dur is not responsive of the first second
     currentDur+=1
@@ -99,7 +106,7 @@ def changeDur():
 
     #If the slider hasnt moved        
     elif int(slider.get()) == int(currentDur):
-        print("SLIDER HASNT MOVED")
+        #print("SLIDER HASNT MOVED")
         #Change text 
         durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
         # Change the position of the slider to the current position
@@ -107,7 +114,7 @@ def changeDur():
 
 
     else:
-        print("SLIDER HAS MOVED")
+        #print("SLIDER HAS MOVED")
        
         #We need the position of the slider in time format
         sliderConv = time.strftime("%M:%S", time.gmtime(int(slider.get())))
@@ -119,14 +126,6 @@ def changeDur():
 
         #Manually move the slider
         slider.config(value=(slider.get()+1))
-
-        ###ERROR HERE###
-        """
-        Moving to the next song doesnt allow this loop to end.
-        It double loops!
-
-        Dont really know how to fix this...
-        """
 
     #Run this again and again after 1 second
     # if playState == SONG_IS_PLAYING:
@@ -157,7 +156,7 @@ def changeName():
 def stop():
     global secLoop
 
-    print("Stop pressed")
+    #print("Stop pressed")
 
     #Stop the song in mixer
     pygame.mixer.music.stop()
@@ -186,9 +185,9 @@ def mainBtnFunc(mainQuery):
     
     # If the play state is 0 (initial or stopped)
     if playState == SONG_NOT_PLAYING:
-        # Pause the music (if playing), print a message, and get the selected track
+        # Pause the music (if playing), #print a message, and get the selected track
         pygame.mixer.music.pause()
-        print("Play pressed first time")
+        #print("Play pressed first time")
         track = trackBox.get(ACTIVE)
         
         # Modify track name for file path and find its index in the tracks list
@@ -212,18 +211,18 @@ def mainBtnFunc(mainQuery):
     
     # If the play state is 1 (playing)
     elif playState == SONG_IS_PLAYING:
-        # Pause the music, print a message, update play state, and change button image
+        # Pause the music, #print a message, update play state, and change button image
         pygame.mixer.music.pause()
-        print("Paused")
+        #print("Paused")
         playState = SONG_IS_PAUSED
         mainBtn.configure(image=playBtnImg)
         mainBtn.photo = playBtnImg
     
     # If the play state is 2 (paused)
     elif playState == SONG_IS_PAUSED:
-        # Unpause the music, print a message, update play state, and change button image
+        # Unpause the music, #print a message, update play state, and change button image
         pygame.mixer.music.unpause()
-        print("Unpaused")
+        #print("Unpaused")
         playState = SONG_IS_PLAYING
         mainBtn.configure(image=pauseBtnImg)
         mainBtn.photo = pauseBtnImg
@@ -246,25 +245,12 @@ def nextTrack(move):
     else:
         nextTrack = trackBox.curselection()[0] + move
     
-    # Print the index of the current song (Debug)
-    #print("Current song is number", nextTrack)
+    # #print the index of the current song (Debug)
+    ##print("Current song is number", nextTrack)
 
     # Get the name of the next track, modify for file path, and update listbox selection
     playTrack = trackBox.get(nextTrack)
     playTrack= getSongPath(playTrack)
-
-    """
-    ### INTERNAL ERROR HERE ###
-    The previous song is not internally stopped before the next song is started.
-    So internally, it runs the code for calculating time of the previous song as well as new song.
-    This probably wears down the system, and isn't efficient!
-
-    This can be fixed by ACTUALLY stopping the song then playing the new one,
-    instead of just changing the selected song (cuz thats too ez / cheaty!)
-
-    I'll fix this soon
-
-    """
 
     trackBox.selection_clear(0, END)
     trackBox.activate(nextTrack)
@@ -345,7 +331,7 @@ trackBox.selection_set(0)
 ###ERROR HERE###
 """
 Tries to load all the songs. But on the first attempt, there wont be any songs!
-This needs to be fixed with some form of exception
+This needs to be fixed with some form of exception / a button!
 """
 
 global tracks
@@ -455,11 +441,6 @@ frontBtn = Button(
     highlightthickness=0,
     bd=0,
 )
-
-# img_6 = img_6.resize((45, 45))
-# img_6 = ImageTk.PhotoImage(img_6)
-# stop_image = Button(down_frame, width=40, height=40, image=img_6, padx=10, font=("Ivy 10"))
-# stop_image.place(x=194+28, y=35)
 
 # Grid layout for control buttons
 backBtn.grid(row=0, column=0, padx=20)
