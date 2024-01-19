@@ -42,9 +42,9 @@ The initial release will be a desktop application, with potential plans for futu
 - Autoplay, Themes, Loops
 
 ### Contributors
-- Adeeb
-- Shubham
-- Nazia
+- Adeeb Rahman
+- Shubham Sharma
+- Nazia Kaesh
 
 ### Disclaimer
 By accessing and using the Melodia Music Player ("the App"), you agree to the following terms:
