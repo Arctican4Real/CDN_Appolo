@@ -34,7 +34,7 @@ The initial release will be a desktop application, with potential plans for futu
 - Autoplay and Loop buttons
 
 ### Planned Features
-- Change to a more reliable music search API
+- Change to a more reliable music search API key
 - Create database and store more information about the Tracks
 - Implement Playlists
 - Implement Shuffle Play
