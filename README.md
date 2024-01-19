@@ -4,14 +4,10 @@
 
 ## Project Description
 
-This project aims to create a feature-rich music streaming application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:  
-
-- Search for songs ✓
-- Download Songs ✓
-- Skip ✓, Pause ✓, Rewind, Loop songs
-- UI music player to play Tracks ✓ and Playlists
-- Create play and edit playlists
-- Shuffle play
+This project aims to create a feature-rich music streaming application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:
+- Search for music
+- Have all features of a general Mp3 player (pause, play, skip, autoplay, etc.)
+- Play, Create and Edit Playlists
 
 ### Specifications
 
@@ -25,24 +21,39 @@ The initial release will be a desktop application, with potential plans for futu
 
 *While an account system is not currently required, it may be implemented if we have time.* 
 
-### To Do
-- Change to a more reliable music search API
-- Create music player ✓
-- Implement basic Tkinter UI ✓
-- Create database and store more information about the Tracks
-- Add option to search both tracks or album
-- Implement simple way to download all dependencies
-- Connect music GUI to Download feature
-- Complete music player functions
-- Add secret features
-- Further stylize GUI
+### IMPORTANT NOTE
+The TrackSearchDownload script will not work unless you have a valid [Deezer API](https://developers.deezer.com/)!
+Please register for one, and create a ".env" file, with you own keys as variables.
+You may use ".env_sample" as a template (rename to .env afterwards)
 
 ### Currently Working On
-- Slider, Autoplay, Themes, Loops, Scroll Bar
-- Database for songs
-- Download app GUI
+- Button to access music folder
+- Autoplay and Loop buttons
+
+### Planned Features
+- Change to a more reliable music search API
+- Create database and store more information about the Tracks
+- Implement Playlists
+- Implement Shuffle Play
+- Add option to search both tracks or album
+- Connect music GUI to Download feature
+- Add secret features
+- Autoplay, Themes, Loops
 
 ### Contributors
 - Adeeb
 - Shubham
 - Nazia
+
+### Disclaimer
+By accessing and using the Melodia Music Player ("the App"), you agree to the following terms:
+
+- Educational/Learning Purposes Only: Melodia is intended for educational and learning purposes, including the developers' own learning experiences. Users are encouraged to explore and develop their programming skills within the context of this project.
+
+- Legal Use Only: The App is designed for legal purposes only. Users must abide by applicable laws and regulations in their jurisdiction when using the App. Any illegal use is strictly prohibited.
+
+- No Responsibility for Legal Issues: The developers of Melodia are not responsible for any legal issues arising from the use of the App. Users are solely responsible for ensuring their compliance with local laws and regulations.
+
+- Media Ownership: All media content played through Melodia belongs to their original creators. The developers of Melodia do not claim any rights over the media and assume no responsibility for the legality or appropriateness of the content.
+
+By using Melodia, you acknowledge and accept these terms. The developers reserve the right to modify the terms of use at any time. Users are advised to review this disclaimer periodically for any updates.
