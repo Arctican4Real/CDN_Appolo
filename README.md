@@ -5,9 +5,10 @@
 ## Project Description
 
 This project aims to create a feature-rich music streaming application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:
-- Search for music
-- Have all features of a general Mp3 player (pause, play, skip, autoplay, etc.)
+- Search and save music
+- Have all features of a general MP3 player (pause, play, skip, autoplay, etc.)
 - Play, Create and Edit Playlists
+- Interact with the app through a mordern UI
 
 ### Specifications
 
@@ -22,9 +23,9 @@ The initial release will be a desktop application, with potential plans for futu
 *While an account system is not currently required, it may be implemented if we have time.* 
 
 ### IMPORTANT NOTE
-The TrackSearchDownload script will not work unless you have a valid [Deezer API](https://developers.deezer.com/)!
-Please register for one, and create a ".env" file, with you own keys as variables.
-You may use ".env_sample" as a template (rename to .env afterwards)
+- The TrackSearchDownload script will not work unless you have a valid [Deezer API](https://developers.deezer.com/)!
+- Please register for one, and create a ".env" file, with your own keys as variables.
+- You may use ".env_sample" as a template (rename to .env afterwards)
 
 ### Currently Working On
 - Button to access music folder
