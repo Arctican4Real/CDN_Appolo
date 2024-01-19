@@ -48,7 +48,7 @@ The initial release will be a desktop application, with potential plans for futu
 - Shubham Sharma
 - Nazia Kaesh
 
-#### Disclaimer
+## Disclaimer
 By accessing and using the Melodia Music Player ("the App"), you agree to the following terms:
 
 - Educational/Learning Purposes Only: Melodia is intended for educational and learning purposes, including the developers' own learning experiences. Users are encouraged to explore and develop their programming skills within the context of this project.
