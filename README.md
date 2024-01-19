@@ -27,7 +27,9 @@ The initial release will be a desktop application, with potential plans for futu
 - Please register for one, and create a ".env" file, with your own keys as variables.
 - You may use ".env_sample" as a template (rename to .env afterwards)
 
-### Currently Working On
+## Current Progress
+
+### Working On
 - Button to access music folder
 - Autoplay and Loop buttons
 
@@ -41,12 +43,12 @@ The initial release will be a desktop application, with potential plans for futu
 - Add secret features
 - Autoplay, Themes, Loops
 
-### Contributors
+## Contributors
 - Adeeb Rahman
 - Shubham Sharma
 - Nazia Kaesh
 
-### Disclaimer
+#### Disclaimer
 By accessing and using the Melodia Music Player ("the App"), you agree to the following terms:
 
 - Educational/Learning Purposes Only: Melodia is intended for educational and learning purposes, including the developers' own learning experiences. Users are encouraged to explore and develop their programming skills within the context of this project.
