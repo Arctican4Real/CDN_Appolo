@@ -22,7 +22,7 @@ The initial release will be a desktop application, with potential plans for futu
 
 *While an account system is not currently required, it may be implemented if we have time.* 
 
-### ! IMPORTANT NOTE !
+## ! IMPORTANT NOTE !
 - The TrackSearchDownload script will not work unless you have a valid [Deezer API](https://developers.deezer.com/)
 - Please register for one, and create a ".env" file, with your own keys as variables.
 - You may use ".env_sample" as a template (rename to .env afterwards)
