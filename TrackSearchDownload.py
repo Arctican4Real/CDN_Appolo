@@ -25,10 +25,16 @@ import shutil
 # To download images
 import urllib
 
-# Custom file that has passcode for API
+# Accessing API password
+import os
+from dotenv import load_dotenv
+
+# Get the App id and app secret
 try :
-    from passcode import *
-except :
+    load_dotenv()
+    app_id=os.environ["APP_ID"]
+    app_secret=os.environ["APP_SECRET"]
+except KeyError:
     print("FATAL ERROR :")
     print("Uh Oh! You don't have an API key, so I can't access Deezer!")
     print("Did you copy passcode.py into the main folder?")
