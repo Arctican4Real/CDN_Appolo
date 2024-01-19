@@ -51,12 +51,12 @@ The initial release will be a desktop application, with potential plans for futu
 ## Disclaimer
 By accessing and using the Melodia Music Player ("the App"), you agree to the following terms:
 
-- Educational/Learning Purposes Only: Melodia is intended for educational and learning purposes, including the developers' own learning experiences. Users are encouraged to explore and develop their programming skills within the context of this project.
+- **Educational/Learning Purposes Only**: Melodia is intended for educational and learning purposes, including the developers' own learning experiences. Users are encouraged to explore and develop their programming skills within the context of this project.
 
-- Legal Use Only: The App is designed for legal purposes only. Users must abide by applicable laws and regulations in their jurisdiction when using the App. Any illegal use is strictly prohibited.
+- **Legal Use Only**: The App is designed for legal purposes only. Users must abide by applicable laws and regulations in their jurisdiction when using the App. Any illegal use is strictly prohibited.
 
-- No Responsibility for Legal Issues: The developers of Melodia are not responsible for any legal issues arising from the use of the App. Users are solely responsible for ensuring their compliance with local laws and regulations.
+- **No Responsibility for Legal Issues**: The developers of Melodia are not responsible for any legal issues arising from the use of the App. Users are solely responsible for ensuring their compliance with local laws and regulations.
 
-- Media Ownership: All media content played through Melodia belongs to their original creators. The developers of Melodia do not claim any rights over the media and assume no responsibility for the legality or appropriateness of the content.
+- **Media Ownership**: All media content played through Melodia belongs to their original creators. The developers of Melodia do not claim any rights over the media and assume no responsibility for the legality or appropriateness of the content.
 
 By using Melodia, you acknowledge and accept these terms. The developers reserve the right to modify the terms of use at any time. Users are advised to review this disclaimer periodically for any updates.
