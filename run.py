@@ -309,6 +309,8 @@ def slide(pos):
         pygame.mixer.music.play(loops=0,start=int(curPos))
         slider.config(value=curPos)
 
+def downloadSong():
+    os.system("python3 TrackSearchDownload.py")
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
@@ -321,6 +323,29 @@ trackBox = Listbox(
     selectbackground=accentBlue,
     selectborderwidth=0,
 )
+
+
+# bgBlack = "#171D1C"
+# fgWhite = "#EFE9F4"
+# accentBlue = "#3695F5"
+
+
+# Top menu bar
+
+#Code for main menu bar
+settings = Menu(
+    screen,
+    bg=fgWhite,
+    bd=0)
+screen.config(menu=settings)
+
+#Code for download button on menu bar
+downloadMenu = Menu(
+    settings,
+    bg=fgWhite,
+    bd=0)
+settings.add_cascade(label="Download",menu=downloadMenu)
+downloadMenu.add_command(label="New Song", command=downloadSong)
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
