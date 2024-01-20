@@ -16,8 +16,8 @@ import tkinter.ttk as ttk
 
 # Define color constants
 bgMain = "#171D1C"
-bgSec = "#3F3F3B"
-fgMain = "#EFE9F4"
+bgSec = "#252D2D"
+fgMain = "#F9F9ED"
 accent = "#3695F5"
 
 # Create the main Tkinter window
@@ -39,11 +39,11 @@ screen.geometry("330x630")
 pygame.mixer.init()
 
 # Load control button images
-playBtnImg = PhotoImage(file="./sources/ctrlbtn/play.png")
-pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pause.png")
-stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stop.png")
-frontBtnImg = PhotoImage(file="./sources/ctrlbtn/front.png")
-backBtnImg = PhotoImage(file="./sources/ctrlbtn/back.png")
+playBtnImg = PhotoImage(file="./sources/ctrlbtn/playBtnImgBlue.png")
+pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pauseBtnImgBlue.png")
+stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stopBtnImgBlue.png")
+frontBtnImg = PhotoImage(file="./sources/ctrlbtn/frontBtnImgBlue.png")
+backBtnImg = PhotoImage(file="./sources/ctrlbtn/backBtnImgBlue.png")
 
 # Initialize global variable for play state, as well as what play state means
 global playState
@@ -310,8 +310,46 @@ def slide(pos):
         pygame.mixer.music.play(loops=0,start=int(curPos))
         slider.config(value=curPos)
 
+# Placeholder function to download a track
 def downloadSong():
     os.system("python3 TrackSearchDownload.py")
+
+# Function to change color scheme
+def changeColor(scheme):
+    #Change the color pallette
+    if scheme == "BLUE":
+        bgMain = "#171D1C"
+        bgSec = "#252D2D"
+        fgMain = "#F9F9ED"
+        accent = "#3695F5"
+
+    elif scheme == "GREEN":
+        bgMain = "#1B1C16"
+        bgSec = "#2B2E26"
+        fgMain = "#FAEDF6"
+        accent = "#56F536"
+
+    elif scheme == "RED":
+        bgMain = "#1C161A"
+        bgSec = "#2E2629"
+        fgMain = "#EDF3FA"
+        accent = "#F53C36"
+
+    # Change elements that use the background color
+    for i in bgMainBgList:
+        i.configure(bg=bgMain)
+        print("Backgrounds changed")
+
+    # Change elements that use the background color
+    for j in fgMainFgList:
+        j.configure(fg=fgMain)
+        print("Foregrounds changed")
+
+    # Change elements that use the accent color
+    trackBox.configure(selectbackground=accent)
+    curTitle.configure(bg=accent)
+
+
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
@@ -326,27 +364,36 @@ trackBox = Listbox(
 )
 
 
-# bgMain = "#171D1C"
-# fgMain = "#EFE9F4"
-# accent = "#3695F5"
-
-
 # Top menu bar
 
 #Code for main menu bar
 settings = Menu(
     screen,
-    bg=fgMain,
+    bg=bgSec,
+    fg=fgMain,
     bd=0)
 screen.config(menu=settings)
 
 #Code for download button on menu bar
 downloadMenu = Menu(
     settings,
-    bg=fgMain,
+    bg=bgMain,
+    fg=fgMain,
     bd=0)
 settings.add_cascade(label="Download",menu=downloadMenu)
 downloadMenu.add_command(label="New Song", command=downloadSong)
+
+#Code for themes button on menu bar
+themeMenu = Menu(
+    settings,
+    bg=bgMain,
+    fg=fgMain,
+    bd=0)
+settings.add_cascade(label="Theme",menu=themeMenu)
+themeMenu.add_command(label="Blue", command=lambda : changeColor("BLUE"))
+themeMenu.add_command(label="Green", command=lambda : changeColor("GREEN"))
+themeMenu.add_command(label="Red", command=lambda : changeColor("RED"))
+
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -473,6 +520,10 @@ backBtn.grid(row=0, column=0, padx=20)
 mainBtn.grid(row=0, column=1, padx=20)
 frontBtn.grid(row=0, column=2, padx=20)
 stopBtn.grid(row=1, column=1, pady=10)
+
+# A list containing elements which use saved colors
+bgMainBgList= [screen,trackBox,downloadMenu,themeMenu,durLabel,curTitle,btnDiv,mainBtn,stopBtn,backBtn,frontBtn]
+fgMainFgList = [trackBox,settings,downloadMenu,themeMenu,durLabel]
 
 # Start the Tkinter event loop
 screen.mainloop()
