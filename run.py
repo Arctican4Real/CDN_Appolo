@@ -13,7 +13,7 @@ import os
 import time
 from mutagen.mp3 import MP3
 import tkinter.ttk as ttk
-import default
+from tkinter import messagebox
 
 # Define color constants
 bgMain = "#171D1C"
@@ -157,6 +157,11 @@ def changeName():
 
 # Function to stop the music
 def stop():
+    #Check to see if folder is empty
+    if emptyFolder:
+        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        return
+
     global secLoop
 
     #print("Stop pressed")
@@ -181,6 +186,11 @@ def stop():
 
 #A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
+    #Check to see if folder is empty
+    if emptyFolder:
+        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        return
+
     global playState, tracks
     
     # Copy the current play state to the local variable mainQuery
@@ -232,14 +242,23 @@ def mainBtnFunc(mainQuery):
 
 # Function to play the next or previous track
 def nextTrack(move):
+    #Check to see if folder is empty
+    if emptyFolder:
+        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        return
+    try:
+        # Get the index of the currently selected track in the listbox
+        curTrack = trackBox.curselection()[0]
+    except IndexError:
+        messagebox.showerror('Error: Select a song!', 
+            "You have to click on the track you want to play")
+        return
+
     #Stop the currently playing song
     stop()
 
     global playState
 
-    # Get the index of the currently selected track in the listbox
-    curTrack = trackBox.curselection()[0]
-    
     # Calculate the index of the next track based on the movement direction
     if curTrack == 0 and move == -1:
         nextTrack = trackBox.size() - 1
@@ -300,6 +319,11 @@ def getSongCov(name):
 
 #slider function
 def slide(pos):
+    #Check to see if folder is empty
+    # if emptyFolder:
+    #     messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+    #     return
+
     if playState != SONG_IS_PLAYING:
         pass
     else:
@@ -319,7 +343,7 @@ def downloadSong():
 # Function to change color scheme
 def changeColor(scheme):
     #Change the color pallette
-    #Col is for chaning file path to button icons
+    #Col is for changing file path to button icons
     if scheme == "BLUE":
         bgMain = "#171D1C"
         bgSec = "#252D2D"
@@ -340,7 +364,6 @@ def changeColor(scheme):
         fgMain = "#EDF3FA"
         accent = "#F53C36"
         col = "Red"
-
 
     # Change elements that use the background color
     for i in bgMainBgList:
@@ -389,6 +412,32 @@ def changeColor(scheme):
     defaultColor.write(scheme)
     defaultColor.close()
 
+# Function to reload the track box
+def reloadTracks():
+    #Check to see if folder is empty
+    if emptyFolder:
+        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        return
+
+    # Redefine tracks list
+    global tracks
+    tracks = []
+    for name in os.listdir("./music"):
+        if name in [".gitignore", "albumCover"]:
+            continue
+        tracks.append(name)
+    tracks = sorted(tracks)
+
+    # Clear current trackbox
+    trackBox.delete(0,"end")
+
+    #Add everything back
+    for name in tracks:
+        name = name.replace(".mp3", "")
+        name = name.replace("_", " ")
+        trackBox.insert("end", name)
+
+
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
@@ -419,8 +468,10 @@ downloadMenu = Menu(
     bg=bgMain,
     fg=fgMain,
     bd=0)
-settings.add_cascade(label="Download",menu=downloadMenu)
-downloadMenu.add_command(label="New Song", command=downloadSong)
+
+#Placeholder download button
+# settings.add_cascade(label="Download",menu=downloadMenu)
+settings.add_command(label="Download", command=downloadSong)
 
 #Code for themes button on menu bar
 themeMenu = Menu(
@@ -433,6 +484,8 @@ themeMenu.add_command(label="Blue", command=lambda : changeColor("BLUE"))
 themeMenu.add_command(label="Green", command=lambda : changeColor("GREEN"))
 themeMenu.add_command(label="Red", command=lambda : changeColor("RED"))
 
+# Button to reload the tracks
+settings.add_command(label="Reload", command=reloadTracks)
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -454,7 +507,14 @@ for name in os.listdir("./music"):
     tracks.append(name)
 tracks = sorted(tracks)
 
-# Fill the listbox with track names
+#If the file is empty
+if len(tracks) == 0:
+    tracks = ["Get some songs!"]
+    # This variable tracks if the directory is empty
+    emptyFolder = True
+else:
+    emptyFolder = False
+
 for name in tracks:
     name = name.replace(".mp3", "")
     name = name.replace("_", " ")
@@ -464,7 +524,13 @@ for name in tracks:
 # albumCover = tracks[0].replace(".mp3", "")
 # albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
 
-albumCover = getSongCov(trackBox.get(0))
+#Load the first cover from the folder
+if not emptyFolder:
+    albumCover = getSongCov(trackBox.get(0))
+# If the folder is empty, get default cover
+else:
+    albumCover="./reference/template.png"
+
 global curCover
 curCover = Image.open(albumCover)
 curCover = curCover.resize((250, 250), Image.LANCZOS)
@@ -503,7 +569,11 @@ slider = ttk.Scale(
 slider.pack(pady=20, padx=20)
 
 # Text box for song length
-firstTrack = getSongName(trackBox.get(0))
+if not emptyFolder:
+    firstTrack = getSongName(trackBox.get(0))
+#Default variable if no songs
+else:
+    firstTrack = "Welcome to Melodia!"
 
 # Display the current song name
 curTitle = Label(screen, text=firstTrack, bd=1, bg=accent, fg=bgMain)
