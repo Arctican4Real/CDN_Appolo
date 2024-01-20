@@ -13,6 +13,7 @@ import os
 import time
 from mutagen.mp3 import MP3
 import tkinter.ttk as ttk
+import default
 
 # Define color constants
 bgMain = "#171D1C"
@@ -39,6 +40,7 @@ screen.geometry("330x630")
 pygame.mixer.init()
 
 # Load control button images
+global playBtnImg,pauseBtnImg,stopBtnImg,frontBtnImg,backBtnImg
 playBtnImg = PhotoImage(file="./sources/ctrlbtn/playBtnImgBlue.png")
 pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pauseBtnImgBlue.png")
 stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stopBtnImgBlue.png")
@@ -317,38 +319,75 @@ def downloadSong():
 # Function to change color scheme
 def changeColor(scheme):
     #Change the color pallette
+    #Col is for chaning file path to button icons
     if scheme == "BLUE":
         bgMain = "#171D1C"
         bgSec = "#252D2D"
         fgMain = "#F9F9ED"
         accent = "#3695F5"
+        col = "Blue"
 
     elif scheme == "GREEN":
         bgMain = "#1B1C16"
         bgSec = "#2B2E26"
         fgMain = "#FAEDF6"
         accent = "#56F536"
+        col = "Green"
 
     elif scheme == "RED":
         bgMain = "#1C161A"
         bgSec = "#2E2629"
         fgMain = "#EDF3FA"
         accent = "#F53C36"
+        col = "Red"
+
 
     # Change elements that use the background color
     for i in bgMainBgList:
         i.configure(bg=bgMain)
-        print("Backgrounds changed")
 
-    # Change elements that use the background color
-    for j in fgMainFgList:
-        j.configure(fg=fgMain)
-        print("Foregrounds changed")
+    # Change elements that use the foreground color
+    for i in fgMainFgList:
+        i.configure(fg=fgMain)
+
+    # Change elements that use the secondary background color
+    for i in bgSecBgList:
+        i.configure(bg=bgSec)
 
     # Change elements that use the accent color
+    # (not in a loop because we have to change different things)
     trackBox.configure(selectbackground=accent)
     curTitle.configure(bg=accent)
 
+    #Change the file we're using for the images (it will now default to these)
+    global playBtnImg,pauseBtnImg,stopBtnImg,frontBtnImg,backBtnImg
+
+    playBtnImg = PhotoImage(file=f"./sources/ctrlbtn/playBtnImg{col}.png")
+    pauseBtnImg = PhotoImage(file=f"./sources/ctrlbtn/pauseBtnImg{col}.png")
+    stopBtnImg = PhotoImage(file=f"./sources/ctrlbtn/stopBtnImg{col}.png")
+    frontBtnImg = PhotoImage(file=f"./sources/ctrlbtn/frontBtnImg{col}.png")
+    backBtnImg = PhotoImage(file=f"./sources/ctrlbtn/backBtnImg{col}.png")
+
+    # Change the button images
+    mainBtn.configure(image=playBtnImg)
+    stopBtn.configure(image=stopBtnImg)
+    frontBtn.configure(image=frontBtnImg)
+    backBtn.configure(image=backBtnImg)
+
+    #Stop garbage collection (if this code is not here, 
+    #the loaded images are deleted before they are used)
+    mainBtn.photo = playBtnImg
+    stopBtn.photo = stopBtnImg
+    frontBtn.photo = frontBtnImg
+    backBtn.photo = backBtnImg
+
+    # Change this to new default
+    defaultColor = open('./config/COLOR.txt', 'r+')
+    #Erase the file
+    defaultColor.truncate(0)
+    #Write new default
+    defaultColor.write(scheme)
+    defaultColor.close()
 
 # Create a listbox to display tracks
 trackBox = Listbox(
@@ -515,15 +554,23 @@ frontBtn = Button(
     bd=0,
 )
 
+# A list containing elements which use saved colors
+bgMainBgList= [screen,trackBox,downloadMenu,themeMenu,durLabel,curTitle,btnDiv,mainBtn,stopBtn,backBtn,frontBtn,settings]
+fgMainFgList = [trackBox,settings,downloadMenu,themeMenu,durLabel]
+bgSecBgList = [settings]
+
 # Grid layout for control buttons
 backBtn.grid(row=0, column=0, padx=20)
 mainBtn.grid(row=0, column=1, padx=20)
 frontBtn.grid(row=0, column=2, padx=20)
 stopBtn.grid(row=1, column=1, pady=10)
 
-# A list containing elements which use saved colors
-bgMainBgList= [screen,trackBox,downloadMenu,themeMenu,durLabel,curTitle,btnDiv,mainBtn,stopBtn,backBtn,frontBtn]
-fgMainFgList = [trackBox,settings,downloadMenu,themeMenu,durLabel]
+# Change the color scheme to default
+
+# Get the default color
+defaultColor = open('./config/COLOR.txt', 'rt')
+changeColor(defaultColor.read())
+defaultColor.close()
 
 # Start the Tkinter event loop
 screen.mainloop()
