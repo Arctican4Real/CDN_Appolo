@@ -15,14 +15,15 @@ from mutagen.mp3 import MP3
 import tkinter.ttk as ttk
 
 # Define color constants
-bgBlack = "#171D1C"
-fgWhite = "#EFE9F4"
-accentBlue = "#3695F5"
+bgMain = "#171D1C"
+bgSec = "#3F3F3B"
+fgMain = "#EFE9F4"
+accent = "#3695F5"
 
 # Create the main Tkinter window
 screen = Tk()
 screen.title("Melodia")
-screen.configure(bg=bgBlack)
+screen.configure(bg=bgMain)
 
 # Import and display program icon
 img = PhotoImage(file="./sources/icon.gif")
@@ -314,20 +315,20 @@ def downloadSong():
 # Create a listbox to display tracks
 trackBox = Listbox(
     screen,
-    bg=bgBlack,
-    fg=fgWhite,
+    bg=bgMain,
+    fg=fgMain,
     width=30,
     height=5,
     borderwidth=0,
     highlightthickness=0,
-    selectbackground=accentBlue,
+    selectbackground=accent,
     selectborderwidth=0,
 )
 
 
-# bgBlack = "#171D1C"
-# fgWhite = "#EFE9F4"
-# accentBlue = "#3695F5"
+# bgMain = "#171D1C"
+# fgMain = "#EFE9F4"
+# accent = "#3695F5"
 
 
 # Top menu bar
@@ -335,14 +336,14 @@ trackBox = Listbox(
 #Code for main menu bar
 settings = Menu(
     screen,
-    bg=fgWhite,
+    bg=fgMain,
     bd=0)
 screen.config(menu=settings)
 
 #Code for download button on menu bar
 downloadMenu = Menu(
     settings,
-    bg=fgWhite,
+    bg=fgMain,
     bd=0)
 settings.add_cascade(label="Download",menu=downloadMenu)
 downloadMenu.add_command(label="New Song", command=downloadSong)
@@ -394,8 +395,8 @@ durLabel = Label(
     borderwidth=0,
     highlightthickness=0,
     bd=0,
-    bg=bgBlack,
-    fg=fgWhite,
+    bg=bgMain,
+    fg=fgMain,
     width=20,
     height=1,
     font=("Arial", 16)
@@ -419,14 +420,14 @@ slider.pack(pady=20, padx=20)
 firstTrack = getSongName(trackBox.get(0))
 
 # Display the current song name
-curTitle = Label(screen, text=firstTrack, bd=1, bg=accentBlue, fg=bgBlack)
+curTitle = Label(screen, text=firstTrack, bd=1, bg=accent, fg=bgMain)
 curTitle.pack(fill=X, ipady=5, pady=10)
 
 # Pack the listbox (Under the cover)
 trackBox.pack()
 
 # Create a frame for control buttons
-btnDiv = Frame(screen, bg=bgBlack, pady=10, bd=0)
+btnDiv = Frame(screen, bg=bgMain, pady=10, bd=0)
 btnDiv.pack()
 
 # Create control buttons
@@ -435,7 +436,7 @@ mainBtn = Button(
     image=playBtnImg,
     borderwidth=0,
     command=lambda: mainBtnFunc(playState),
-    bg=bgBlack,
+    bg=bgMain,
     highlightthickness=0,
     bd=0,
 )
@@ -444,7 +445,7 @@ stopBtn = Button(
     image=stopBtnImg,
     borderwidth=0,
     command=stop,
-    bg=bgBlack,
+    bg=bgMain,
     highlightthickness=0,
     bd=0,
 )
@@ -453,7 +454,7 @@ backBtn = Button(
     image=backBtnImg,
     borderwidth=0,
     command=lambda: nextTrack(-1),
-    bg=bgBlack,
+    bg=bgMain,
     highlightthickness=0,
     bd=0,
 )
@@ -462,7 +463,7 @@ frontBtn = Button(
     image=frontBtnImg,
     borderwidth=0,
     command=lambda: nextTrack(1),
-    bg=bgBlack,
+    bg=bgMain,
     highlightthickness=0,
     bd=0,
 )
