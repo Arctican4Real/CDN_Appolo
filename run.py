@@ -1,10 +1,3 @@
-#TODO
-"""
-Auto play feature w/button
-Open folder feature
-Color Schemes (?)
-"""
-
 # Import necessary libraries
 from tkinter import *
 import pygame
@@ -33,14 +26,14 @@ screen.iconphoto(True, img)
 
 # Set window properties
 screen.resizable(0, 0)
-#Default 330x550
+# Default 330x550
 screen.geometry("330x630")
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
 
 # Load control button images
-global playBtnImg,pauseBtnImg,stopBtnImg,frontBtnImg,backBtnImg
+global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg
 playBtnImg = PhotoImage(file="./sources/ctrlbtn/playBtnImgBlue.png")
 pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pauseBtnImgBlue.png")
 stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stopBtnImgBlue.png")
@@ -62,92 +55,75 @@ def changeDur():
     global tracks
     global playState
 
-    #If the song is stopped, dont do all this
+    # If the song is stopped, dont do all this
     if playState == SONG_NOT_PLAYING:
         return
 
-    #Grab current time, edit the duration text (as integer)
-    currentDur = pygame.mixer.music.get_pos()/1000
+    # Grab current time, edit the duration text (as integer)
+    currentDur = pygame.mixer.music.get_pos() / 1000
 
-    #Sometimes there is a error when song is played, so fix it
+    # Sometimes there is a error when song is played, so fix it
     if currentDur < 0:
         currentDur = 0
 
-    #Convert it into proper format
+    # Convert it into proper format
     convCurrentDur = time.strftime("%M:%S", time.gmtime(currentDur))
 
-    #::: Getting the total time :::
-    songLen = (songLengthGrabber())
+    # Getting the total time
+    songLen = songLengthGrabber()
 
-    #Convert again
+    # Convert again
     convTotLen = time.strftime("%M:%S", time.gmtime(songLen))
 
-
-    # Update the slider position REDUNDANT
-    #slider.config(value = int(currentDur))
-
-    # Just for debug
-    #print(f"Slider Position : {int(slider.get())}, Song Position : {int(currentDur)}")
-    ##print(playState)
-
-    #Small bug where current dur is not responsive of the first second
-    currentDur+=1
+    # Small bug where current dur is not responsive of the first second
+    currentDur += 1
 
     # Change the position and size of slider
-    slider.config(to_ =songLen,value=int(slider.get()))
+    slider.config(to_=songLen, value=int(slider.get()))
 
-    #If the song has finished playing
+    # If the song has finished playing
     if int(slider.get()) == int(songLen):
-        #nextTrack(1)
-        #Show that the song is complete
+        # Show that the song is complete
         durLabel.config(text=f"{convTotLen} / {convTotLen}")
         stop()
 
-    #Else, if its paused, we dont want to do anything
+    # Else, if its paused, we dont want to do anything
     elif playState == SONG_IS_PAUSED:
         pass
 
-    #If the slider hasnt moved        
+    # If the slider hasnt moved
     elif int(slider.get()) == int(currentDur):
-        #print("SLIDER HASNT MOVED")
-        #Change text 
+        # Change text
         durLabel.config(text=f"{convCurrentDur} / {convTotLen}")
         # Change the position of the slider to the current position
         slider.config(to_=songLengthGrabber(), value=int(currentDur))
 
-
     else:
-        #print("SLIDER HAS MOVED")
-       
-        #We need the position of the slider in time format
+        # We need the position of the slider in time format
         sliderConv = time.strftime("%M:%S", time.gmtime(int(slider.get())))
 
         durLabel.config(text=f"{sliderConv} / {convTotLen}")
 
-        # Change the position of the song to the current slider position
-        # slider.config(to_=songLengthGrabber(), value=int(currentDur))
+        # Manually move the slider
+        slider.config(value=(slider.get() + 1))
 
-        #Manually move the slider
-        slider.config(value=(slider.get()+1))
-
-    #Run this again and again after 1 second
-    # if playState == SONG_IS_PLAYING:
+    # Run this again and again after 1 second
     global secLoop
-    secLoop = screen.after(1000,changeDur)
+    secLoop = screen.after(1000, changeDur)
+
 
 # Get length of song length
 def songLengthGrabber():
     # Get file path of currently playing song
-    track = trackBox.get(ACTIVE)    
-    # track = track.replace(" ", "_")
-    # curTrack = f"./music/{track}.mp3"
+    track = trackBox.get(ACTIVE)
     track = getSongPath(track)
 
-    #Read song length with mutagen
+    # Read song length with mutagen
     songMutagen = MP3(track)
-    songLength= songMutagen.info.length
-    #Convert to proper format
+    songLength = songMutagen.info.length
+    # Convert to proper format
     return songLength
+
 
 # Function to change name of track
 def changeName():
@@ -155,58 +131,62 @@ def changeName():
     name = getSongName(currentPlaying)
     curTitle.configure(text=name)
 
+
 # Function to stop the music
 def stop():
-    #Check to see if folder is empty
+    # Check to see if folder is empty
     if emptyFolder:
-        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        messagebox.showerror(
+            "Error: No Songs!",
+            "Looks like you don't have any songs downloaded! Please download some",
+        )
         return
 
     global secLoop
 
-    #print("Stop pressed")
-
-    #Stop the song in mixer
+    # Stop the song in mixer
     pygame.mixer.music.stop()
 
-    #Cancel the currently playing job
+    # Cancel the currently playing job
     screen.after_cancel(secLoop)
 
-    #Change playState
+    # Change playState
     global playState
     playState = SONG_NOT_PLAYING
 
-    #Change all GUI elements
+    # Change all GUI elements
     mainBtn.configure(image=playBtnImg)
     mainBtn.photo = playBtnImg
     slider.config(value=0)
     durLabel.config(text=f"00:00")
 
 
-
-#A function that controls teh working of the main play button
+# A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
-    #Check to see if folder is empty
+    # Check to see if folder is empty
     if emptyFolder:
-        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        messagebox.showerror(
+            "Error: No Songs!",
+            "Looks like you don't have any songs downloaded! Please download some",
+        )
         return
 
     global playState, tracks
-    
+
     # Copy the current play state to the local variable mainQuery
     mainQuery = playState
-    
+
     # If the play state is 0 (initial or stopped)
     if playState == SONG_NOT_PLAYING:
         # Pause the music (if playing), #print a message, and get the selected track
         pygame.mixer.music.pause()
-        #print("Play pressed first time")
+        # print("Play pressed first time")
         track = trackBox.get(ACTIVE)
-        
+
         # Modify track name for file path and find its index in the tracks list
-        track= getSongPath(track)
+        track = getSongPath(track)
         trackIndex = tracks.index(track.replace("./music/", ""))
-        
+
         # Load and play the selected track, update play state, and change album cover
         pygame.mixer.music.load(track)
         pygame.mixer.music.play(loops=0)
@@ -219,42 +199,46 @@ def mainBtnFunc(mainQuery):
         # Change the current title name
         changeName()
 
-        #Run the song duration fucntion when first played
-        changeDur() 
-    
+        # Run the song duration fucntion when first played
+        changeDur()
+
     # If the play state is 1 (playing)
     elif playState == SONG_IS_PLAYING:
-        # Pause the music, #print a message, update play state, and change button image
+        # Pause the music,
+        # print a message, update play state, and change button image
         pygame.mixer.music.pause()
-        #print("Paused")
         playState = SONG_IS_PAUSED
         mainBtn.configure(image=playBtnImg)
         mainBtn.photo = playBtnImg
-    
+
     # If the play state is 2 (paused)
     elif playState == SONG_IS_PAUSED:
         # Unpause the music, #print a message, update play state, and change button image
         pygame.mixer.music.unpause()
-        #print("Unpaused")
         playState = SONG_IS_PLAYING
         mainBtn.configure(image=pauseBtnImg)
         mainBtn.photo = pauseBtnImg
 
+
 # Function to play the next or previous track
 def nextTrack(move):
-    #Check to see if folder is empty
+    # Check to see if folder is empty
     if emptyFolder:
-        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
+        messagebox.showerror(
+            "Error: No Songs!",
+            "Looks like you don't have any songs downloaded! Please download some",
+        )
         return
     try:
         # Get the index of the currently selected track in the listbox
         curTrack = trackBox.curselection()[0]
     except IndexError:
-        messagebox.showerror('Error: Select a song!', 
-            "You have to click on the track you want to play")
+        messagebox.showerror(
+            "Error: Select a song!", "You have to click on the track you want to play"
+        )
         return
 
-    #Stop the currently playing song
+    # Stop the currently playing song
     stop()
 
     global playState
@@ -266,27 +250,25 @@ def nextTrack(move):
         nextTrack = 0
     else:
         nextTrack = trackBox.curselection()[0] + move
-    
-    # #print the index of the current song (Debug)
-    ##print("Current song is number", nextTrack)
 
     # Get the name of the next track, modify for file path, and update listbox selection
     playTrack = trackBox.get(nextTrack)
-    playTrack= getSongPath(playTrack)
+    playTrack = getSongPath(playTrack)
 
     trackBox.selection_clear(0, END)
     trackBox.activate(nextTrack)
     trackBox.selection_set(nextTrack, last=None)
-    
+
     # Change the album cover based on the selected track
     changeCover(nextTrack)
-    
+
     # Reset play state and simulate a button click to start playing the new track
     playState = 0
     mainBtnFunc(0)
 
     # Change the current title name
     changeName()
+
 
 # Function to change the album cover image based on the selected track
 def changeCover(trackNum):
@@ -298,17 +280,20 @@ def changeCover(trackNum):
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
+
 # Function to get song name
 def getSongName(path):
     name = path.replace(".mp3", "")
     name = name.replace("_", " ")
     return name
 
+
 # Function to get song path
 def getSongPath(name):
     name = name.replace(" ", "_")
     path = f"./music/{name}.mp3"
     return path
+
 
 # Function to get song album path
 def getSongCov(name):
@@ -317,12 +302,9 @@ def getSongCov(name):
     path = f"./music/albumCover/{path}-cover.jpg"
     return path
 
-#slider function
+
+# slider function
 def slide(pos):
-    #Check to see if folder is empty
-    # if emptyFolder:
-    #     messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
-    #     return
 
     if playState != SONG_IS_PLAYING:
         pass
@@ -331,19 +313,21 @@ def slide(pos):
         track = getSongPath(track)
         # # Load and play the selected track, update play state, and change album cover
         pygame.mixer.music.load(track)
-        
-        curPos = slider.get() 
-        pygame.mixer.music.play(loops=0,start=int(curPos))
+
+        curPos = slider.get()
+        pygame.mixer.music.play(loops=0, start=int(curPos))
         slider.config(value=curPos)
+
 
 # Placeholder function to download a track
 def downloadSong():
     os.system("python3 TrackSearchDownload.py")
 
+
 # Function to change color scheme
 def changeColor(scheme):
-    #Change the color pallette
-    #Col is for changing file path to button icons
+    # Change the color pallette
+    # Col is for changing file path to button icons
     if scheme == "BLUE":
         bgMain = "#171D1C"
         bgSec = "#252D2D"
@@ -382,8 +366,8 @@ def changeColor(scheme):
     trackBox.configure(selectbackground=accent)
     curTitle.configure(bg=accent)
 
-    #Change the file we're using for the images (it will now default to these)
-    global playBtnImg,pauseBtnImg,stopBtnImg,frontBtnImg,backBtnImg
+    # Change the file we're using for the images (it will now default to these)
+    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg
 
     playBtnImg = PhotoImage(file=f"./sources/ctrlbtn/playBtnImg{col}.png")
     pauseBtnImg = PhotoImage(file=f"./sources/ctrlbtn/pauseBtnImg{col}.png")
@@ -397,28 +381,24 @@ def changeColor(scheme):
     frontBtn.configure(image=frontBtnImg)
     backBtn.configure(image=backBtnImg)
 
-    #Stop garbage collection (if this code is not here, 
-    #the loaded images are deleted before they are used)
+    # Stop garbage collection (if this code is not here,
+    # the loaded images are deleted before they are used)
     mainBtn.photo = playBtnImg
     stopBtn.photo = stopBtnImg
     frontBtn.photo = frontBtnImg
     backBtn.photo = backBtnImg
 
     # Change this to new default
-    defaultColor = open('./config/COLOR.txt', 'r+')
-    #Erase the file
+    defaultColor = open("./config/COLOR.txt", "r+")
+    # Erase the file
     defaultColor.truncate(0)
-    #Write new default
+    # Write new default
     defaultColor.write(scheme)
     defaultColor.close()
 
+
 # Function to reload the track box
 def reloadTracks():
-    #Check to see if folder is empty
-    if emptyFolder:
-        messagebox.showerror('Error: No Songs!', "Looks like you don\'t have any songs downloaded! Please download some")
-        return
-
     # Redefine tracks list
     global tracks
     tracks = []
@@ -428,10 +408,26 @@ def reloadTracks():
         tracks.append(name)
     tracks = sorted(tracks)
 
-    # Clear current trackbox
-    trackBox.delete(0,"end")
+    global emptyFolder
+    if len(tracks) == 0:
+        tracks = ["Get some songs!"]
+        # This variable tracks if the directory is empty
+        emptyFolder = True
+    else:
+        emptyFolder = False
 
-    #Add everything back
+    # Check to see if folder is empty
+    if emptyFolder:
+        messagebox.showerror(
+            "Error: No Songs!",
+            "Looks like you don't have any songs downloaded! Please download some",
+        )
+        return
+
+    # Clear current trackbox
+    trackBox.delete(0, "end")
+
+    # Add everything back
     for name in tracks:
         name = name.replace(".mp3", "")
         name = name.replace("_", " ")
@@ -454,35 +450,23 @@ trackBox = Listbox(
 
 # Top menu bar
 
-#Code for main menu bar
-settings = Menu(
-    screen,
-    bg=bgSec,
-    fg=fgMain,
-    bd=0)
+# Code for main menu bar
+settings = Menu(screen, bg=bgSec, fg=fgMain, bd=0)
 screen.config(menu=settings)
 
-#Code for download button on menu bar
-downloadMenu = Menu(
-    settings,
-    bg=bgMain,
-    fg=fgMain,
-    bd=0)
+# Code for download button on menu bar
+downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0)
 
-#Placeholder download button
+# Placeholder download button
 # settings.add_cascade(label="Download",menu=downloadMenu)
 settings.add_command(label="Download", command=downloadSong)
 
-#Code for themes button on menu bar
-themeMenu = Menu(
-    settings,
-    bg=bgMain,
-    fg=fgMain,
-    bd=0)
-settings.add_cascade(label="Theme",menu=themeMenu)
-themeMenu.add_command(label="Blue", command=lambda : changeColor("BLUE"))
-themeMenu.add_command(label="Green", command=lambda : changeColor("GREEN"))
-themeMenu.add_command(label="Red", command=lambda : changeColor("RED"))
+# Code for themes button on menu bar
+themeMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0)
+settings.add_cascade(label="Theme", menu=themeMenu)
+themeMenu.add_command(label="Blue", command=lambda: changeColor("BLUE"))
+themeMenu.add_command(label="Green", command=lambda: changeColor("GREEN"))
+themeMenu.add_command(label="Red", command=lambda: changeColor("RED"))
 
 # Button to reload the tracks
 settings.add_command(label="Reload", command=reloadTracks)
@@ -491,45 +475,15 @@ settings.add_command(label="Reload", command=reloadTracks)
 trackBox.activate(0)
 trackBox.selection_set(0)
 
-# Fetch list of tracks
+# Initially load the tracks
+reloadTracks()
 
-###ERROR HERE###
-"""
-Tries to load all the songs. But on the first attempt, there wont be any songs!
-This needs to be fixed with some form of exception / a button!
-"""
-
-global tracks
-tracks = []
-for name in os.listdir("./music"):
-    if name in [".gitignore", "albumCover"]:
-        continue
-    tracks.append(name)
-tracks = sorted(tracks)
-
-#If the file is empty
-if len(tracks) == 0:
-    tracks = ["Get some songs!"]
-    # This variable tracks if the directory is empty
-    emptyFolder = True
-else:
-    emptyFolder = False
-
-for name in tracks:
-    name = name.replace(".mp3", "")
-    name = name.replace("_", " ")
-    trackBox.insert("end", name)
-
-# Load the initial album cover
-# albumCover = tracks[0].replace(".mp3", "")
-# albumCover = f"./music/albumCover/{albumCover}-cover.jpg"
-
-#Load the first cover from the folder
+# Load the first cover from the folder
 if not emptyFolder:
     albumCover = getSongCov(trackBox.get(0))
 # If the folder is empty, get default cover
 else:
-    albumCover="./reference/template.png"
+    albumCover = "./sources/template.png"
 
 global curCover
 curCover = Image.open(albumCover)
@@ -542,7 +496,7 @@ curCoverLabel.pack(pady=10)
 
 # Display the song duration
 durLabel = Label(
-    screen, 
+    screen,
     text="00:00",
     borderwidth=0,
     highlightthickness=0,
@@ -551,27 +505,27 @@ durLabel = Label(
     fg=fgMain,
     width=20,
     height=1,
-    font=("Arial", 16)
-    )
+    font=("Arial", 16),
+)
 
 durLabel.pack()
 
 # Slider for song duration
 slider = ttk.Scale(
     screen,
-    from_=0, 
+    from_=0,
     to=100,
     orient=HORIZONTAL,
     value=0,
-    length = 330,
-    command = slide,
-    )
+    length=330,
+    command=slide,
+)
 slider.pack(pady=20, padx=20)
 
 # Text box for song length
 if not emptyFolder:
     firstTrack = getSongName(trackBox.get(0))
-#Default variable if no songs
+# Default variable if no songs
 else:
     firstTrack = "Welcome to Melodia!"
 
@@ -625,8 +579,21 @@ frontBtn = Button(
 )
 
 # A list containing elements which use saved colors
-bgMainBgList= [screen,trackBox,downloadMenu,themeMenu,durLabel,curTitle,btnDiv,mainBtn,stopBtn,backBtn,frontBtn,settings]
-fgMainFgList = [trackBox,settings,downloadMenu,themeMenu,durLabel]
+bgMainBgList = [
+    screen,
+    trackBox,
+    downloadMenu,
+    themeMenu,
+    durLabel,
+    curTitle,
+    btnDiv,
+    mainBtn,
+    stopBtn,
+    backBtn,
+    frontBtn,
+    settings,
+]
+fgMainFgList = [trackBox, settings, downloadMenu, themeMenu, durLabel]
 bgSecBgList = [settings]
 
 # Grid layout for control buttons
@@ -638,7 +605,7 @@ stopBtn.grid(row=1, column=1, pady=10)
 # Change the color scheme to default
 
 # Get the default color
-defaultColor = open('./config/COLOR.txt', 'rt')
+defaultColor = open("./config/COLOR.txt", "rt")
 changeColor(defaultColor.read())
 defaultColor.close()
 
