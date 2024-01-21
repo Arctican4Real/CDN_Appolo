@@ -459,17 +459,17 @@ downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0)
 
 # Placeholder download button
 # settings.add_cascade(label="Download",menu=downloadMenu)
-settings.add_command(label="Download", command=downloadSong)
+settings.add_command(label="     Download     ", command=downloadSong)
 
 # Code for themes button on menu bar
-themeMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0)
-settings.add_cascade(label="Theme", menu=themeMenu)
-themeMenu.add_command(label="Blue", command=lambda: changeColor("BLUE"))
-themeMenu.add_command(label="Green", command=lambda: changeColor("GREEN"))
-themeMenu.add_command(label="Red", command=lambda: changeColor("RED"))
+themeMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0, tearoff="off")
+settings.add_cascade(label="     Theme     ", menu=themeMenu)
+themeMenu.add_command(label="Blazing Dusk", command=lambda: changeColor("RED"))
+themeMenu.add_command(label="Lush Harmony", command=lambda: changeColor("GREEN"))
+themeMenu.add_command(label="Moonlit Oasis", command=lambda: changeColor("BLUE"))
 
 # Button to reload the tracks
-settings.add_command(label="Reload", command=reloadTracks)
+settings.add_command(label="     Reload     ", command=reloadTracks)
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
