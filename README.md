@@ -4,7 +4,7 @@
 
 ## Project Description
 
-This project aims to create a feature-rich music streaming application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:
+This project aims to create a feature-rich music playing application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:
 - Search and save music
 - Have all features of a general MP3 player (pause, play, skip, autoplay, etc.)
 - Play, Create and Edit Playlists
