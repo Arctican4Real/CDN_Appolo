@@ -10,6 +10,8 @@ This project aims to create a feature-rich music streaming application that effe
 - Play, Create and Edit Playlists
 - Interact with the app through a mordern UI
 
+![Sample Image](./sources/sample.png?raw=true "Sample Image")
+
 ### Specifications
 
 To search for music, the [Deezer API](https://developers.deezer.com/) is currently being used.
