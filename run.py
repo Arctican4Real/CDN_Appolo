@@ -357,6 +357,13 @@ def changeColor(scheme):
         accent = "#F53C36"
         col = "Red"
 
+    elif scheme == "PURPLE":
+        bgMain = "#16181C"
+        bgSec = "#27262E"
+        fgMain = "#EEFAED"
+        accent = "#8F36F5"
+        col = "Purple"        
+
     # Change elements that use the background color
     for i in bgMainBgList:
         i.configure(bg=bgMain)
@@ -486,6 +493,7 @@ settings.add_cascade(label="     Theme     ", menu=themeMenu)
 themeMenu.add_command(label="Blazing Dusk", command=lambda: changeColor("RED"))
 themeMenu.add_command(label="Lush Harmony", command=lambda: changeColor("GREEN"))
 themeMenu.add_command(label="Moonlit Oasis", command=lambda: changeColor("BLUE"))
+themeMenu.add_command(label="Cosmic Orchid", command=lambda: changeColor("PURPLE"))
 
 # Button to reload the tracks
 settings.add_command(label="     Reload     ", command=reloadTracks)
