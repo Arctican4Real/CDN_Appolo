@@ -11,7 +11,8 @@ This project aims to create a feature-rich music streaming application that effe
 - Interact with the app through a mordern UI
 
 ![Sample Image](./sources/sample.png?raw=true "Sample Image")
-*Application with "Nebula" Theme*
+
+*Caption: Application with "Nebula" Theme*
 
 ### Specifications
 
