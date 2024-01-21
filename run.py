@@ -27,7 +27,7 @@ screen.iconphoto(True, img)
 # Set window properties
 screen.resizable(0, 0)
 # Default 330x550
-screen.geometry("330x630")
+screen.geometry("330x600")
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
@@ -442,14 +442,6 @@ def reloadTracks():
     else:
         emptyFolder = False
 
-    # # Check to see if folder is empty
-    # if emptyFolder:
-    #     messagebox.showerror(
-    #         "Error: No Songs!",
-    #         "Looks like you don't have any songs downloaded! Please download some",
-    #     )
-    #     return
-
     # Clear current trackbox
     trackBox.delete(0, "end")
 
@@ -466,7 +458,7 @@ trackBox = Listbox(
     bg=bgMain,
     fg=fgMain,
     width=30,
-    height=5,
+    height=3,
     borderwidth=0,
     highlightthickness=0,
     selectbackground=accent,
@@ -519,7 +511,7 @@ curCover = ImageTk.PhotoImage(curCover)
 
 # Create a label to display the album cover
 curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=0)
-curCoverLabel.pack(pady=10)
+curCoverLabel.pack(pady=20)
 
 # Display the song duration
 durLabel = Label(
