@@ -513,7 +513,7 @@ curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
 # Create a label to display the album cover
-curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=2, highlightbackground=bgSec)
+curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=4, highlightbackground=bgSec)
 curCoverLabel.pack(pady=20)
 
 # Display the song duration
