@@ -416,13 +416,13 @@ def reloadTracks():
     else:
         emptyFolder = False
 
-    # Check to see if folder is empty
-    if emptyFolder:
-        messagebox.showerror(
-            "Error: No Songs!",
-            "Looks like you don't have any songs downloaded! Please download some",
-        )
-        return
+    # # Check to see if folder is empty
+    # if emptyFolder:
+    #     messagebox.showerror(
+    #         "Error: No Songs!",
+    #         "Looks like you don't have any songs downloaded! Please download some",
+    #     )
+    #     return
 
     # Clear current trackbox
     trackBox.delete(0, "end")
