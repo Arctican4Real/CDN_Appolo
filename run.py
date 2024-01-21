@@ -381,6 +381,9 @@ def changeColor(scheme):
     trackBox.configure(selectbackground=accent)
     curTitle.configure(bg=accent)
 
+    #Change cur cover border color
+    curCoverLabel.config(highlightbackground=bgSec)
+
     # Change the file we're using for the images (it will now default to these)
     global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg
 
@@ -510,7 +513,7 @@ curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
 # Create a label to display the album cover
-curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=0)
+curCoverLabel = Label(image=curCover, borderwidth=0, highlightthickness=2, highlightbackground=bgSec)
 curCoverLabel.pack(pady=20)
 
 # Display the song duration
