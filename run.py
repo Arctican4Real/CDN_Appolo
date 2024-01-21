@@ -333,6 +333,7 @@ def downloadSong():
 
 # Function to change color scheme
 def changeColor(scheme):
+    global playState
     # Change the color pallette
     # Col is for changing file path to button icons
     if scheme == "BLUE":
@@ -383,7 +384,18 @@ def changeColor(scheme):
     backBtnImg = PhotoImage(file=f"./sources/ctrlbtn/backBtnImg{col}.png")
 
     # Change the button images
-    mainBtn.configure(image=playBtnImg)
+
+    #If song is playing, pause button image should be used
+    if playState == SONG_IS_PLAYING:
+        mainBtn.configure(image=pauseBtnImg)
+        #Stop Garbage collection
+        mainBtn.photo = pauseBtnImg
+    else:
+        #Otherwise use play button
+        mainBtn.configure(image=playBtnImg)
+        #Stop Garbage collection
+        mainBtn.photo = playBtnImg
+
     stopBtn.configure(image=stopBtnImg)
     frontBtn.configure(image=frontBtnImg)
     backBtn.configure(image=backBtnImg)
