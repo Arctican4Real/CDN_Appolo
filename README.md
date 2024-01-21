@@ -10,7 +10,7 @@ This project aims to create a feature-rich music playing application that effect
 - Play, Create and Edit Playlists
 - Interact with the app through a mordern UI
 
-![Sample Image](./sources/sample.png?raw=true "Sample Image")
+![Sample Image](./sources/sampleImg.png?raw=true "Sample Image")
 
 *Caption: Application with "Nebula" Theme*
 
