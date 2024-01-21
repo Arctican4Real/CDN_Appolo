@@ -129,6 +129,10 @@ def songLengthGrabber():
 def changeName():
     currentPlaying = trackBox.get(ACTIVE)
     name = getSongName(currentPlaying)
+    # If song name is longer than 32 chars, shorten it
+    if len(name) > 32:
+        name = name[:32] + "..."
+        
     curTitle.configure(text=name)
 
 
@@ -285,6 +289,7 @@ def changeCover(trackNum):
 def getSongName(path):
     name = path.replace(".mp3", "")
     name = name.replace("_", " ")
+
     return name
 
 
