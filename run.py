@@ -482,10 +482,10 @@ settings.add_command(label="     Download     ", command=downloadSong)
 # Code for themes button on menu bar
 themeMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0, tearoff="off")
 settings.add_cascade(label="     Theme     ", menu=themeMenu)
-themeMenu.add_command(label="Blazing Dusk", command=lambda: changeColor("RED"))
-themeMenu.add_command(label="Lush Harmony", command=lambda: changeColor("GREEN"))
-themeMenu.add_command(label="Moonlit Oasis", command=lambda: changeColor("BLUE"))
-themeMenu.add_command(label="Cosmic Orchid", command=lambda: changeColor("PURPLE"))
+themeMenu.add_command(label="Blazing Magma", command=lambda: changeColor("RED"))
+themeMenu.add_command(label="Lush Orchard", command=lambda: changeColor("GREEN"))
+themeMenu.add_command(label="Moonlit Lake", command=lambda: changeColor("BLUE"))
+themeMenu.add_command(label="Nebula Glow", command=lambda: changeColor("PURPLE"))
 
 # Button to reload the tracks
 settings.add_command(label="     Reload     ", command=reloadTracks)
