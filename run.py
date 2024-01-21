@@ -132,7 +132,7 @@ def changeName():
     # If song name is longer than 32 chars, shorten it
     if len(name) > 32:
         name = name[:32] + "..."
-        
+
     curTitle.configure(text=name)
 
 
@@ -326,8 +326,10 @@ def slide(pos):
 
 # Placeholder function to download a track
 def downloadSong():
-    os.system("python3 TrackSearchDownload.py")
-
+    messagebox.showinfo(
+        "Feature not implemented",
+        "The download feature has not yet been implemented. Please manually run TrackSearchDownload.py",
+    )
 
 # Function to change color scheme
 def changeColor(scheme):
