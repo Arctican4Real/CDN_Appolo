@@ -7,6 +7,7 @@ import time
 from mutagen.mp3 import MP3
 import tkinter.ttk as ttk
 from tkinter import messagebox
+import download
 
 # Define color constants
 bgMain = "#171D1C"
@@ -330,17 +331,11 @@ def slide(pos):
         pygame.mixer.music.play(loops=0, start=int(curPos))
         slider.config(value=curPos)
 
-
-# Placeholder function to download a track
-def downloadSong():
-    messagebox.showinfo(
-        "Feature not implemented",
-        "The download feature has not yet been implemented. Please manually run download.py",
-    )
-
 #Open folder
 def openFolder():
     os.system('xdg-open "%s"' % "./music/")
+
+
 # Function to change color scheme
 def changeColor(scheme):
     global playState
@@ -472,11 +467,11 @@ settings = Menu(screen, bg=bgSec, fg=fgMain, bd=0)
 screen.config(menu=settings)
 
 # Code for download button on menu bar
-downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0)
+downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0,tearoff="off")
 settings.add_cascade(label="Download", menu=downloadMenu)
 
 #Button to download songs
-downloadMenu.add_command(label="Get Song", command=downloadSong)
+downloadMenu.add_command(label="Get Song", command=lambda:download.downloadSong(screen))
 # Button to reload the tracks
 downloadMenu.add_command(label="Reload Tracks", command=reloadTracks)
 downloadMenu.add_command(label="Open Folder", command=openFolder)

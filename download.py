@@ -29,6 +29,13 @@ import urllib
 import os
 from dotenv import load_dotenv
 
+#Tkinter
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+from tkinter.ttk import *
+
+
 # Get the App id and app secret
 try :
     load_dotenv()
@@ -48,106 +55,205 @@ client = deezer.Client(
     headers={"Accept-Language": "en"},
 )
 
-# Ask for artist
-artist = input("Which artist? : ")
-
-# Use deezer to search for this artist
-deezerArtist = client.search_artists(artist)[0]
-
-print(f"Looking for songs by {deezerArtist.name} ...")
-
-print()
-print()
-
-# Get the top tracks from the API (returns JSON format list)
-topTracks = deezerArtist.tracklist
-print(topTracks)
-topTracksSearch = requests.get(topTracks, headers={"Accept-Language": "en"})
-
-# Convert that JSON file to Python Dictionary so we can work with it
-topTracksSearchJson = json.loads(topTracksSearch.text)
-
-
-# Print the title of the first 20 songs from that list (list gives total 50 songs)
-counter = 0
-print("Here are the top 20 songs, please select one : ")
-
-for entry in topTracksSearchJson["data"]:
-    if counter >= 20:
-        break
-
-    print(str(counter + 1), end=" : ")
-    # This line prints the title
-    print(entry["title"])
-    counter += 1
-
-# Ask the user which tracks they want, and select it
-chosenTrack = int(input("Which song? : ")) - 1
-chosenTrack = topTracksSearchJson["data"][chosenTrack]
-
-print(f"You have chosen {chosenTrack['title']}")
-
-# Search for the Artist + Song Name + "Audio" on youtube with pytube
-# Example - "Avicii Waiting for love audio" is searched
-searchList = Search(
-    str(chosenTrack["title"] + str(chosenTrack["artist"]["name"])) + " audio"
-)
-# Get the first video from search result
-firstResult = str(searchList.results[0])
-
-# These two lines get the video id, and uses that to make the link
-# Basically, get the link
-vidID = firstResult.split("=")[1].replace(">", "")
-finalLink = "https://www.youtube.com/watch?v=" + vidID
-
-# This is a path to the folder where our song will be saved
-# It names the folder the title of the song, replacing spaces with underscores
-# Example - "Waiting_for_love"
-path = "./music/" #+ str(chosenTrack["title"]).replace(" ", "_")
-
-# This is the song name and artist name, replacing spaces with underscores
-songName = str(chosenTrack["title"]).replace(" ", "_")
-artistName = str(chosenTrack["artist"]["name"]).replace(" ", "_")
-
-# Make the folder
-# os.mkdir(path)
-
-print("Downlading song...")
-
-# Use the link we found before to download the video at lowest resolution (we only need audio) to the folder
-target = YouTube(finalLink)
-
-# This downloads the MP4 file inside the folder we made
-target.streams.filter(file_extension="mp4").first().download(
-    path, filename=songName + ".mp4"
-)
-print("Done!")
-
 # This is a function to turn MP4 files into just audio MP3 files
 def mp4_to_mp3(mp4, mp3):
     mp4_without_frames = AudioFileClip(mp4)
     mp4_without_frames.write_audiofile(mp3)
     mp4_without_frames.close()
 
+def submit_button_clicked():
+    status_bar.config(text=f"Working")
 
-# This will convert our MP4 to MP3 using that function
-mp4_to_mp3(f"{path}/{songName}.mp4", f"{path}/{artistName}-{songName}.mp3")
+    # Ask for artist
+    artist = entryBox.get()
 
-# Delete the original file to save on space
-os.remove(f"{path}/{songName}.mp4")
+    #Error handling for empty
+    if len(artist) == 0:
+        return
 
-# These two lines get the cover art of the album from the API, and download it to our folder
-coverImg = chosenTrack["album"]["cover_big"]
-# This will save the cover image as "./Downloads/ARTISTNAME-SONGNAME-COVER.jpg"
-# Example - ./Downloads/Avicii-Waiting_for_love-cover.jpg
-urllib.request.urlretrieve(coverImg, f"{path}/albumCover/{artistName}-{songName}-cover.jpg")
+    # Use deezer to search for this artist
+    deezerArtist = client.search_artists(artist)[0]
 
-print("Downloading complete!")
+    status_bar.config(text=f"Showing songs by {deezerArtist.name} ...")
+    
 
-# This asks the user if they want to play the song
-# playQue = input("Play song? (y/n) : ").lower()
-# if playQue == "y":
-#     # If yes, we use their web browser (chrome, firefox, edge etc.) to play the mp3 file
-#     webbrowser.open(f"{path}/{artistName}-{songName}.mp3")
-# else:
-#     pass
+    # Get the top tracks from the API (returns JSON format list)
+    topTracks = deezerArtist.tracklist
+    topTracksSearch = requests.get(topTracks, headers={"Accept-Language": "en"})
+
+    # Convert that JSON file to Python Dictionary so we can work with it
+    global topTracksSearchJson
+    topTracksSearchJson = json.loads(topTracksSearch.text)
+
+    if len(topTracksSearchJson)==0:
+        messagebox.showerror(
+            "No Songs!",
+            "Looks like this artist doesn't exist in our registry :(",
+        )
+
+    #Clear listbox
+    results_listbox.delete(0,'end')
+    #Enter into
+    for entry in topTracksSearchJson["data"]:
+        # This line prints the title
+        results_listbox.insert("end",entry["title"])
+
+
+def download_button_clicked():
+    status_bar.config(text=f"Downloading...")
+
+    global topTracksSearchJson
+    # Ask the user which tracks they want, and select it
+    index = results_listbox.curselection() 
+    if not topTracksSearchJson and not index:
+        return
+
+    chosenTrack = topTracksSearchJson["data"][index[0]-1]    
+
+    # Search for the Artist + Song Name + "Audio" on youtube with pytube
+    # Example - "Avicii Waiting for love audio" is searched
+    searchList = Search(
+        str(chosenTrack["title"] + str(chosenTrack["artist"]["name"])) + " audio"
+    )
+    # Get the first video from search result
+    firstResult = str(searchList.results[0])
+
+    # These two lines get the video id, and uses that to make the link
+    # Basically, get the link
+    vidID = firstResult.split("=")[1].replace(">", "")
+    finalLink = "https://www.youtube.com/watch?v=" + vidID
+
+    # This is a path to the folder where our song will be saved
+    # It names the folder the title of the song, replacing spaces with underscores
+    # Example - "Waiting_for_love"
+    path = "./music/" #+ str(chosenTrack["title"]).replace(" ", "_")
+
+    # This is the song name and artist name, replacing spaces with underscores
+    songName = str(chosenTrack["title"]).replace(" ", "_")
+    artistName = str(chosenTrack["artist"]["name"]).replace(" ", "_")
+
+    # Make the folder
+    # os.mkdir(path)
+
+    status_bar.config(text=f"Downloading song...")
+
+    # Use the link we found before to download the video at lowest resolution (we only need audio) to the folder
+    target = YouTube(finalLink)
+
+    status_bar.config(text=f"Converting to MP3")
+    # This downloads the MP4 file inside the folder we made
+    target.streams.filter(file_extension="mp4").first().download(
+        path, filename=songName + ".mp4"
+    )
+
+    # This will convert our MP4 to MP3 using that function
+    mp4_to_mp3(f"{path}/{songName}.mp4", f"{path}/{artistName}-{songName}.mp3")
+
+    # Delete the original file to save on space
+    os.remove(f"{path}/{songName}.mp4")
+
+    # These two lines get the cover art of the album from the API, and download it to our folder
+    coverImg = chosenTrack["album"]["cover_big"]
+    # This will save the cover image as "./Downloads/ARTISTNAME-SONGNAME-COVER.jpg"
+    # Example - ./Downloads/Avicii-Waiting_for_love-cover.jpg
+    urllib.request.urlretrieve(coverImg, f"{path}/albumCover/{artistName}-{songName}-cover.jpg")
+
+    status_bar.config(text=f"Downloading Complete! Click \"Reload Tracks\" on main menu")
+
+
+#This is the code for our new window
+def downloadSong(main):
+    #Generate scheme
+    defaultColor = open("./config/COLOR.txt", "rt")
+    scheme = defaultColor.read()
+    defaultColor.close()
+
+    if scheme == "BLUE":
+        bgMain = "#171D1C"
+        bgSec = "#252D2D"
+        fgMain = "#F9F9ED"
+        accent = "#3695F5"
+        col = "Blue"
+
+    elif scheme == "GREEN":
+        bgMain = "#1B1C16"
+        bgSec = "#2B2E26"
+        fgMain = "#FAEDF6"
+        accent = "#56F536"
+        col = "Green"
+
+    elif scheme == "RED":
+        bgMain = "#1C161A"
+        bgSec = "#2E2629"
+        fgMain = "#EDF3FA"
+        accent = "#F53C36"
+        col = "Red"
+
+    elif scheme == "PURPLE":
+        bgMain = "#16181C"
+        bgSec = "#27262E"
+        fgMain = "#EEFAED"
+        accent = "#8F36F5"
+        col = "Purple"
+
+    # Create main window
+    newWindow = tk.Toplevel(main)
+    newWindow.title("Search and Retrieve Application")
+
+    newWindow.configure(bg=bgMain)
+
+    # Text entry box and Submit button in the same row
+    entry_label = tk.Label(newWindow, text="Type artist name",
+        borderwidth=0,
+        bg=bgMain,
+        fg=fgMain,
+        highlightthickness=0,
+        bd=0,)
+    entry_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.E)
+
+    global entryBox
+    entryBox = tk.Entry(newWindow, borderwidth=0,bg=bgSec,fg=fgMain)
+    entryBox.grid(row=0, column=1, pady=10, padx=10, sticky=tk.W)
+
+    submit_button = tk.Button(newWindow, text="Submit", command=submit_button_clicked,
+        borderwidth=0,
+        bg=accent,
+        fg=bgMain,
+        highlightthickness=0,
+        bd=0,)
+    submit_button.grid(row=0, column=2, pady=10, padx=10, sticky=tk.W)
+
+    # Listbox with scrollbar
+    global results_listbox
+    results_listbox = tk.Listbox(
+        newWindow, 
+        selectmode=tk.SINGLE,
+        bg=bgSec,
+        fg=fgMain,
+        borderwidth=0,
+        highlightthickness=0,
+        selectbackground=accent,
+        selectborderwidth=0)
+    results_listbox.grid(row=1, column=0, columnspan=2, pady=10, padx=10, sticky=tk.W+tk.E)
+
+    scrollbar = tk.Scrollbar(newWindow, orient=tk.VERTICAL, command=results_listbox.yview)
+    scrollbar.grid(row=1, column=2, pady=10, padx=10, sticky=tk.W+tk.N+tk.S)
+    results_listbox.config(yscrollcommand=scrollbar.set)
+
+    # Download button
+    download_button = tk.Button(
+        newWindow, text="Download", command=download_button_clicked,
+        borderwidth=0,
+        bg=accent,
+        fg=bgMain,
+        highlightthickness=0,
+        bd=0,)
+    download_button.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+
+    # Status bar at the bottom
+    global status_bar
+    status_bar = tk.Label(newWindow, text="Download Something!", bd=1, relief=tk.SUNKEN, anchor=tk.W, borderwidth=0, fg=fgMain, bg=bgSec)
+    status_bar.grid(row=3, column=0, columnspan=3, sticky=tk.W+tk.E, padx=5,pady=5)
+
+    # Run the application
+    newWindow.mainloop()
