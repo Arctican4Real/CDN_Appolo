@@ -55,14 +55,16 @@ The initial release will be a desktop application, with potential plans for futu
 - Nazia Kaesh
 
 ## Disclaimer
-By accessing and using the Melodia Music Player ("the App"), you agree to the following terms:
+Usage Disclaimer for Melodia Music Player:
 
-- **Educational/Learning Purposes Only**: Melodia is intended for educational and learning purposes, including the developers' own learning experiences. Users are encouraged to explore and develop their programming skills within the context of this project.
+By utilizing the Melodia Music Player ("the App"), you expressly agree to the following terms:
 
-- **Legal Use Only**: The App is designed for legal purposes only. Users must abide by applicable laws and regulations in their jurisdiction when using the App. Any illegal use is strictly prohibited.
+1. *Educational/Learning Purpose:* Melodia is exclusively intended for educational and learning purposes, promoting the development of users' programming skills within the project's framework.
 
-- **No Responsibility for Legal Issues**: The developers of Melodia are not responsible for any legal issues arising from the use of the App. Users are solely responsible for ensuring their compliance with local laws and regulations.
+2. *Legal Use Requirement:* The App, equipped with downloading capabilities, is designed for lawful purposes only. Users are obligated to adhere to relevant laws and regulations in their jurisdiction. Any illicit use, including unauthorized downloading, is strictly prohibited.
 
-- **Media Ownership**: All media content played through Melodia belongs to their original creators. The developers of Melodia do not claim any rights over the media and assume no responsibility for the legality or appropriateness of the content.
+3. *No Accountability for Legal Issues:* The developers of Melodia disclaim any responsibility for legal issues stemming from the App's use. Users are individually responsible for ensuring compliance with local laws and regulations.
 
-By using Melodia, you acknowledge and accept these terms. The developers reserve the right to modify the terms of use at any time. Users are advised to review this disclaimer periodically for any updates.
+4. *Media Ownership:* All media content played or downloaded through Melodia remains the property of its original creators. The developers assert no rights over the media and assume no responsibility for its legality or appropriateness.
+
+Your usage of Melodia implies acknowledgment and acceptance of these terms. The developers retain the right to modify the terms at any time. Users are advised to periodically review this disclaimer for updates.
