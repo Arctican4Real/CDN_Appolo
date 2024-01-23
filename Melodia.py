@@ -138,6 +138,11 @@ def changeName():
 
 # Function to stop the music
 def stop():
+    global playState
+
+    #If the song is already stopped, we error handle
+    if playState == SONG_NOT_PLAYING:
+        return
     # Check to see if folder is empty
     if emptyFolder:
         messagebox.showerror(
@@ -155,7 +160,6 @@ def stop():
     screen.after_cancel(secLoop)
 
     # Change playState
-    global playState
     playState = SONG_NOT_PLAYING
 
     # Change all GUI elements
@@ -503,7 +507,7 @@ trackBox = Listbox(
 )
 right_frame.grid_rowconfigure(0, weight=1)
 right_frame.grid_columnconfigure(0, weight=1)
-trackBox.grid(row=0,column=0,sticky="nsew")
+trackBox.grid(row=0,column=1,sticky="nsew")
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -521,7 +525,7 @@ else:
 
 #Scroll wheel for track box
 scroll = Scrollbar(right_frame, width=10)
-scroll.grid(row=0,column=1,sticky="ns")
+scroll.grid(row=0,column=0,sticky="ns")
 
 #Functionality of the scroll bar
 trackBox.config(yscrollcommand=scroll.set)
