@@ -195,6 +195,9 @@ def mainBtnFunc(mainQuery):
         track = getSongPath(track)
         trackIndex = tracks.index(track.replace("./music/", ""))
 
+        #Send slider to 0
+        slider.config(value=0)
+
         # Load and play the selected track, update play state, and change album cover
         pygame.mixer.music.load(track)
         pygame.mixer.music.play(loops=0)
@@ -511,7 +514,7 @@ trackBox = Listbox(
 )
 right_frame.grid_rowconfigure(0, weight=1)
 right_frame.grid_columnconfigure(0, weight=1)
-trackBox.grid(row=0,column=1,sticky="nsew")
+trackBox.grid(row=0,column=0,sticky="nsew")
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -529,7 +532,7 @@ else:
 
 #Scroll wheel for track box
 scroll = Scrollbar(right_frame, width=10)
-scroll.grid(row=0,column=0,sticky="ns")
+scroll.grid(row=0,column=1,sticky="ns")
 
 #Functionality of the scroll bar
 trackBox.config(yscrollcommand=scroll.set)
