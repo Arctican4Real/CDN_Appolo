@@ -576,7 +576,7 @@ else:
     firstTrack = "Welcome to Melodia!"
 
 # Display the current song name
-curTitle = Label(left_frame, text="Late Nights - Wallow", bd=1, bg=accent, fg=bgMain)
+curTitle = Label(left_frame, text=firstTrack, bd=1, bg=accent, fg=bgMain)
 curTitle.grid(row=1,column=0, ipady=0, pady=0,sticky="ew")
 
 #Buttons

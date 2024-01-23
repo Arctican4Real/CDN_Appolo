@@ -10,9 +10,11 @@ This project aims to create a feature-rich music playing application that effect
 - Play, Create and Edit Playlists
 - Interact with the app through a mordern UI
 
-![Sample Image](./sources/Preview_Image.png?raw=true "Sample Image")
+![Sample Image](./sources/preview1.png?raw=true "Sample Image")
 
 *Caption: Application with "Moonlit" Theme*
+
+*Cover Art and Tracks belong to original creators*
 
 ### Specifications
 
