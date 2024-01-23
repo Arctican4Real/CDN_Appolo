@@ -335,6 +335,9 @@ def downloadSong():
         "The download feature has not yet been implemented. Please manually run TrackSearchDownload.py",
     )
 
+#Open folder
+def openFolder():
+    os.system('xdg-open "%s"' % "./music/")
 # Function to change color scheme
 def changeColor(scheme):
     global playState
@@ -467,9 +470,13 @@ screen.config(menu=settings)
 
 # Code for download button on menu bar
 downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0)
+settings.add_cascade(label="Download", menu=downloadMenu)
 
-# Placeholder download button
-settings.add_command(label="Download", command=downloadSong)
+#Button to download songs
+downloadMenu.add_command(label="Get Song", command=downloadSong)
+# Button to reload the tracks
+downloadMenu.add_command(label="Reload Tracks", command=reloadTracks)
+downloadMenu.add_command(label="Open Folder", command=openFolder)
 
 # Code for themes button on menu bar
 themeMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0, tearoff="off")
@@ -478,9 +485,6 @@ themeMenu.add_command(label="Magma", command=lambda: changeColor("RED"))
 themeMenu.add_command(label="Lush", command=lambda: changeColor("GREEN"))
 themeMenu.add_command(label="Moonlit", command=lambda: changeColor("BLUE"))
 themeMenu.add_command(label="Nebula", command=lambda: changeColor("PURPLE"))
-
-# Button to reload the tracks
-settings.add_command(label="Reload", command=reloadTracks)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
