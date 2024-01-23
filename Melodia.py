@@ -332,7 +332,7 @@ def slide(pos):
 def downloadSong():
     messagebox.showinfo(
         "Feature not implemented",
-        "The download feature has not yet been implemented. Please manually run TrackSearchDownload.py",
+        "The download feature has not yet been implemented. Please manually run download.py",
     )
 
 #Open folder
