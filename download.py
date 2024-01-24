@@ -74,7 +74,7 @@ def submit_button_clicked():
     # Use deezer to search for this artist
     deezerArtist = client.search_artists(artist)[0]
 
-    status_bar.config(text=f"Showing songs by {deezerArtist.name} ...")
+    status_bar.config(text=f"Showing songs by {deezerArtist.name}")
     ws.update_idletasks()
 
     # Get the top tracks from the API (returns JSON format list)

@@ -8,6 +8,7 @@ from mutagen.mp3 import MP3
 import tkinter.ttk as ttk
 from tkinter import messagebox
 import download
+import webbrowser
 
 # Define color constants
 bgMain = "#171D1C"
@@ -457,7 +458,8 @@ def reloadTracks():
         name = name.replace(".mp3", "")
         name = name.replace("_", " ")
         trackBox.insert("end", name)
-
+def openGithub():
+    webbrowser.open('https://github.com/Arctican4Real/Melodia')
 
 ### UI CODE ###
 
@@ -482,6 +484,9 @@ themeMenu.add_command(label="Magma", command=lambda: changeColor("RED"))
 themeMenu.add_command(label="Lush", command=lambda: changeColor("GREEN"))
 themeMenu.add_command(label="Moonlit", command=lambda: changeColor("BLUE"))
 themeMenu.add_command(label="Nebula", command=lambda: changeColor("PURPLE"))
+
+#Github page link
+settings.add_command(label="Github", command=openGithub)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
