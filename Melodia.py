@@ -169,7 +169,6 @@ def stop():
     slider.config(value=0)
     durLabel.config(text=f"00:00")
 
-
 # A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
     # Check to see if folder is empty
@@ -489,7 +488,7 @@ left_frame = Frame(screen, bg=bgMain)
 left_frame.grid(row=0, column=0, padx=(10,0), pady=10, sticky="nsew")
 
 right_frame = Frame(screen, bg=bgMain)
-right_frame.grid(row=0, column=1, padx=(0,10), pady=(10,20), sticky="nsew")
+right_frame.grid(row=0, column=1, padx=(10,10), pady=(10,20), sticky="nsew")
 
 down_frame = Frame(screen, bg=bgMain)
 down_frame.grid(row=1, column=0, padx=10, pady=0,sticky="ew",columnspan=4)

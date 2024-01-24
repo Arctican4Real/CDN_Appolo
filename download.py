@@ -62,8 +62,8 @@ def mp4_to_mp3(mp4, mp3):
     mp4_without_frames.close()
 
 def submit_button_clicked():
-    status_bar.config(text=f"Working")
-
+    status_bar.config(text=f"Finding Artist...")
+    ws.update_idletasks()
     # Ask for artist
     artist = modify.get()
 
@@ -75,7 +75,7 @@ def submit_button_clicked():
     deezerArtist = client.search_artists(artist)[0]
 
     status_bar.config(text=f"Showing songs by {deezerArtist.name} ...")
-    
+    ws.update_idletasks()
 
     # Get the top tracks from the API (returns JSON format list)
     topTracks = deezerArtist.tracklist
@@ -102,7 +102,8 @@ def submit_button_clicked():
 
 
 def download_button_clicked():
-    status_bar.config(text=f"Downloading...")
+    status_bar.config(text=f"Starting Download...")
+    ws.update_idletasks()
 
     global topTracksSearchJson
     # Ask the user which tracks they want, and select it
@@ -120,6 +121,9 @@ def download_button_clicked():
     # Get the first video from search result
     firstResult = str(searchList.results[0])
 
+    status_bar.config(text=f"Getting Song...")
+    ws.update_idletasks()
+
     # These two lines get the video id, and uses that to make the link
     # Basically, get the link
     vidID = firstResult.split("=")[1].replace(">", "")
@@ -136,8 +140,9 @@ def download_button_clicked():
 
     # Make the folder
     # os.mkdir(path)
-
     status_bar.config(text=f"Downloading song...")
+    ws.update_idletasks()
+
 
     # Use the link we found before to download the video at lowest resolution (we only need audio) to the folder
     target = YouTube(finalLink)
@@ -148,19 +153,26 @@ def download_button_clicked():
         path, filename=songName + ".mp4"
     )
 
+    status_bar.config(text=f"Changing MP3 files...")
+    ws.update_idletasks()
     # This will convert our MP4 to MP3 using that function
     mp4_to_mp3(f"{path}/{songName}.mp4", f"{path}/{artistName}-{songName}.mp3")
+
 
     # Delete the original file to save on space
     os.remove(f"{path}/{songName}.mp4")
 
     # These two lines get the cover art of the album from the API, and download it to our folder
     coverImg = chosenTrack["album"]["cover_big"]
+
+    status_bar.config(text=f"Getting cover image...")
+    ws.update_idletasks()
     # This will save the cover image as "./Downloads/ARTISTNAME-SONGNAME-COVER.jpg"
     # Example - ./Downloads/Avicii-Waiting_for_love-cover.jpg
     urllib.request.urlretrieve(coverImg, f"{path}/albumCover/{artistName}-{songName}-cover.jpg")
 
     status_bar.config(text=f"Downloading Complete! Click \"Reload Tracks\" on main menu")
+
 
 def OnDoubleClick(event):
         item = tree.selection()[0]
@@ -202,6 +214,7 @@ def downloadSong(main):
         col = "Purple"
 
     # Create main window
+    global ws
     ws = tk.Toplevel(main)
     ws.title("Search and Retrieve Application")
     # Set the geometry of the main window (width x height)
