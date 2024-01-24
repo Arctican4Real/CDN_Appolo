@@ -26,7 +26,7 @@ screen.tk.call("wm", "iconphoto", screen._w, img)
 screen.iconphoto(True, img)
 
 # Set window properties
-#screen.resizable(0, 0)
+screen.resizable(0, 0)
 # Default 330x550
 screen.geometry("510x470")
 
