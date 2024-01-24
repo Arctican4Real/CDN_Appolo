@@ -62,10 +62,10 @@ def mp4_to_mp3(mp4, mp3):
     mp4_without_frames.close()
 
 def submit_button_clicked():
-    status_bar.config(text=f"Working")
+    #status_bar.config(text=f"Working")
 
     # Ask for artist
-    artist = entryBox.get()
+    artist = modify.get()
 
     #Error handling for empty
     if len(artist) == 0:
@@ -74,7 +74,7 @@ def submit_button_clicked():
     # Use deezer to search for this artist
     deezerArtist = client.search_artists(artist)[0]
 
-    status_bar.config(text=f"Showing songs by {deezerArtist.name} ...")
+    #status_bar.config(text=f"Showing songs by {deezerArtist.name} ...")
     
 
     # Get the top tracks from the API (returns JSON format list)
@@ -100,7 +100,7 @@ def submit_button_clicked():
 
 
 def download_button_clicked():
-    status_bar.config(text=f"Downloading...")
+    #status_bar.config(text=f"Downloading...")
 
     global topTracksSearchJson
     # Ask the user which tracks they want, and select it
@@ -108,7 +108,7 @@ def download_button_clicked():
     if not topTracksSearchJson and not index:
         return
 
-    chosenTrack = topTracksSearchJson["data"][index[0]-1]    
+    chosenTrack = topTracksSearchJson["data"][index[0]] 
 
     # Search for the Artist + Song Name + "Audio" on youtube with pytube
     # Example - "Avicii Waiting for love audio" is searched
@@ -135,12 +135,12 @@ def download_button_clicked():
     # Make the folder
     # os.mkdir(path)
 
-    status_bar.config(text=f"Downloading song...")
+    #status_bar.config(text=f"Downloading song...")
 
     # Use the link we found before to download the video at lowest resolution (we only need audio) to the folder
     target = YouTube(finalLink)
 
-    status_bar.config(text=f"Converting to MP3")
+    #status_bar.config(text=f"Converting to MP3")
     # This downloads the MP4 file inside the folder we made
     target.streams.filter(file_extension="mp4").first().download(
         path, filename=songName + ".mp4"
@@ -158,8 +158,11 @@ def download_button_clicked():
     # Example - ./Downloads/Avicii-Waiting_for_love-cover.jpg
     urllib.request.urlretrieve(coverImg, f"{path}/albumCover/{artistName}-{songName}-cover.jpg")
 
-    status_bar.config(text=f"Downloading Complete! Click \"Reload Tracks\" on main menu")
+    #status_bar.config(text=f"Downloading Complete! Click \"Reload Tracks\" on main menu")
 
+def OnDoubleClick(event):
+        item = tree.selection()[0]
+        chosenTrack =item
 
 #This is the code for our new window
 def downloadSong(main):
@@ -197,38 +200,79 @@ def downloadSong(main):
         col = "Purple"
 
     # Create main window
-    ws.configure(bg=bgMain)
     ws = tk.Toplevel(main)
     ws.title("Search and Retrieve Application")
     # Set the geometry of the main window (width x height)
     # ws.geometry("690x690")
-    ws.configure(bg='#3695F5')
+    ws.configure(bg=bgMain)
+    artist=" "
+
+    # Create a StringVar to hold the text input value
+    text = tk.StringVar()
+
+    # Create a frame to hold other widgets
+    Frm = tk.Frame(ws)
+
+    # Configure the column weights of the main window to manage space distribution
+    ws.columnconfigure(0, weight=1)
+    ws.columnconfigure(1, weight=1)
+    ws.columnconfigure(2, weight=1)
+    # Create a label for the search input
+
+    search_label = tk.Label(ws,text="Artist Name:  ", bg=bgMain,fg=fgMain,)
+    # Place the search label in the grid layout
+    search_label.grid(column=0, row=2, padx=5, pady=5)
 
     # Text entry box and Submit button in the same row
-    entry_label = tk.Label(newWindow, text="Type artist name",
+    global modify
+    modify = tk.Label(ws, text="Type artist name",
         borderwidth=0,
         bg=bgMain,
         fg=fgMain,
         highlightthickness=0,
         bd=0,)
-    entry_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.E)
+    modify.grid(row=0, column=0, pady=10, padx=10, sticky=tk.E)
 
-    global entryBox
-    entryBox = tk.Entry(newWindow, borderwidth=0,bg=bgSec,fg=fgMain)
-    entryBox.grid(row=0, column=1, pady=10, padx=10, sticky=tk.W)
+    # Create an entry widget for text input, linked to the text StringVar
+    modify = tk.Entry(ws, textvariable=text,bg=bgMain, fg=fgMain)
+    # Place the entry widget in the grid layout and set focus
+    modify.grid(column=1, row=2, padx=5, pady=5)
+    modify.focus()
 
-    submit_button = tk.Button(newWindow, text="Submit", command=submit_button_clicked,
+    # Create a label to display output
+    output_label = tk.Label(text=" ")
+    # Place the output label in the grid layout
+    output_label.grid(column=0, row=3)
+
+    # # Define the function to be called when the search button is pressed
+    # def find():
+    #                 output_label.config(text=text.get())
+    #                 search_label = tk.Label(text="Artist Name:  ")
+    #                 output_label.config(text=" ")
+    #                 # Remove any previous 'found' tag from the output label
+        
+    # Create a button that will call the find function when pressed
+    buttn = tk.Button(ws, text='Search', bd='5', command=submit_button_clicked)
+    # Place the button in the grid layout
+    buttn.grid(column=2, row=2, padx=5, pady=5)
+    columns = ('Song_Name', 'Artist')
+
+
+    # Download button
+    download_button = tk.Button(
+        ws, text="Download", command=download_button_clicked,
         borderwidth=0,
         bg=accent,
         fg=bgMain,
         highlightthickness=0,
         bd=0,)
-    submit_button.grid(row=0, column=2, pady=10, padx=10, sticky=tk.W)
-
-    # Listbox with scrollbar
+    download_button.grid(row=0, column=3, columnspan=3, pady=10, padx=10)
+    # tree = ttk.Treeview(ws, columns=columns, show='headings')
+    # tree.heading('Song_Name', text='Song Name')
+    # tree.heading('Artist', text='Artist')
     global results_listbox
     results_listbox = tk.Listbox(
-        newWindow, 
+        ws, 
         selectmode=tk.SINGLE,
         bg=bgSec,
         fg=fgMain,
@@ -238,92 +282,53 @@ def downloadSong(main):
         selectborderwidth=0)
     results_listbox.grid(row=1, column=0, columnspan=2, pady=10, padx=10, sticky=tk.W+tk.E)
 
-    scrollbar = tk.Scrollbar(newWindow, orient=tk.VERTICAL, command=results_listbox.yview)
+    scrollbar = tk.Scrollbar(ws, orient=tk.VERTICAL, command=results_listbox.yview)
     scrollbar.grid(row=1, column=2, pady=10, padx=10, sticky=tk.W+tk.N+tk.S)
     results_listbox.config(yscrollcommand=scrollbar.set)
+    contacts=[]
 
-    # Download button
-    download_button = tk.Button(
-        newWindow, text="Download", command=download_button_clicked,
-        borderwidth=0,
-        bg=accent,
-        fg=bgMain,
-        highlightthickness=0,
-        bd=0,)
-    download_button.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+    # results_listbox.bind("<Double-1>", submit_button_clicked)
+    #for key in json.loads["data"]:
+    #                contacts.append((f'{key}', f'{artist}'))
+    # tree.bind("<Double-1>", OnDoubleClick)
+    # tree.grid(column=2, row=3, padx=5, pady=5)
 
-    # Status bar at the bottom
-    global status_bar
-    status_bar = tk.Label(newWindow, text="Download Something!", bd=1, relief=tk.SUNKEN, anchor=tk.W, borderwidth=0, fg=fgMain, bg=bgSec)
-    status_bar.grid(row=3, column=0, columnspan=3, sticky=tk.W+tk.E, padx=5,pady=5)
+    # Start the main loop of the application
+    ws.mainloop()
 
-    # Run the application
-    newWindow.mainloop()
+    # global modify
+    # modify = tk.Entry(newWindow, borderwidth=0,bg=bgSec,fg=fgMain)
+    # modify.grid(row=0, column=1, pady=10, padx=10, sticky=tk.W)
 
-# Import tkinter for GUI creation and ttk for themed widgets
-import tkinter as tk
-from tkinter import ttk
-import json
-#import tracksearchdownload.py
-bgBlack = "#171D1C"
-fgWhite = "#EFE9F4"
-accentBlue = "#3695F5"
-#search_image1 = Image.open("<path/image_name>")
-# Create the main window object
-ws = tk.Tk()
-  # Set the geometry of the main window (width x height)
-ws.geometry("690x690")
-ws.configure(bg='#3695F5')
-artist=" "
-# Create a StringVar to hold the text input value
-text = tk.StringVar()
+    # submit_button = tk.Button(newWindow, text="Submit", command=submit_button_clicked,
+    #     borderwidth=0,
+    #     bg=accent,
+    #     fg=bgMain,
+    #     highlightthickness=0,
+    #     bd=0,)
+    # submit_button.grid(row=0, column=2, pady=10, padx=10, sticky=tk.W)
 
-# Create a frame to hold other widgets
-Frm = tk.Frame(ws)
+    # # Listbox with scrollbar
+    # global results_listbox
+    # results_listbox = tk.Listbox(
+    #     newWindow, 
+    #     selectmode=tk.SINGLE,
+    #     bg=bgSec,
+    #     fg=fgMain,
+    #     borderwidth=0,
+    #     highlightthickness=0,
+    #     selectbackground=accent,
+    #     selectborderwidth=0)
+    # results_listbox.grid(row=1, column=0, columnspan=2, pady=10, padx=10, sticky=tk.W+tk.E)
 
-# Configure the column weights of the main window to manage space distribution
-ws.columnconfigure(0, weight=1)
-ws.columnconfigure(1, weight=1)
-ws.columnconfigure(2, weight=1)
-# Create a label for the search input
-search_label = tk.Label(text="Artist Name:  ", bg=bgBlack,fg=fgWhite,)
-# Place the search label in the grid layout
-search_label.grid(column=0, row=2, padx=5, pady=5)
+    # scrollbar = tk.Scrollbar(newWindow, orient=tk.VERTICAL, command=results_listbox.yview)
+    # scrollbar.grid(row=1, column=2, pady=10, padx=10, sticky=tk.W+tk.N+tk.S)
+    # results_listbox.config(yscrollcommand=scrollbar.set)
 
-# Create an entry widget for text input, linked to the text StringVar
-modify = tk.Entry(ws, textvariable=text,bg=bgBlack, fg=fgWhite)
-# Place the entry widget in the grid layout and set focus
-modify.grid(column=1, row=2, padx=5, pady=5)
-modify.focus()
+    # # Status bar at the bottom
+    # global status_bar
+    # status_bar = tk.Label(newWindow, text="Download Something!", bd=1, relief=tk.SUNKEN, anchor=tk.W, borderwidth=0, fg=fgMain, bg=bgSec)
+    # status_bar.grid(row=3, column=0, columnspan=3, sticky=tk.W+tk.E, padx=5,pady=5)
 
-# Create a label to display output
-output_label = tk.Label(text=" ")
-# Place the output label in the grid layout
-output_label.grid(column=0, row=3)
-
-# Define the function to be called when the search button is pressed
-def find():
-                output_label.config(text=" ")
-                output_label.config(text=text.get())
-                search_label = tk.Label(text="Artist Name:  ")
-                # Remove any previous 'found' tag from the output label
-    
-# Create a button that will call the find function when pressed
-buttn = tk.Button(ws, text='Search', bd='5', command=find)
-# Place the button in the grid layout
-buttn.grid(column=2, row=2, padx=5, pady=5)
-columns = ('Song_Name', 'Artist')
-tree = ttk.Treeview(ws, columns=columns, show='headings')
-tree.heading('Song_Name', text='Song Name')
-tree.heading('Artist', text='Artist')
-contacts=[]
-#for key in json.loads["data"]:
-#                contacts.append((f'{key}', f'{artist}'))
-def OnDoubleClick(event):
-        item = tree.selection()[0]
-        chosenTrack =item
-tree.bind("<Double-1>", OnDoubleClick)
-tree.grid(column=2, row=3, padx=5, pady=5)
-
-# Start the main loop of the application
-ws.mainloop()
+    # # Run the application
+    # newWindow.mainloop()
