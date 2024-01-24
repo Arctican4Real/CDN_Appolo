@@ -26,7 +26,7 @@ screen.tk.call("wm", "iconphoto", screen._w, img)
 screen.iconphoto(True, img)
 
 # Set window properties
-screen.resizable(0, 0)
+#screen.resizable(0, 0)
 # Default 330x550
 screen.geometry("510x470")
 
@@ -492,10 +492,17 @@ right_frame = Frame(screen, bg=bgMain)
 right_frame.grid(row=0, column=1, padx=(0,10), pady=(10,20), sticky="nsew")
 
 down_frame = Frame(screen, bg=bgMain)
-down_frame.grid(row=1, column=0, padx=10, pady=0,columnspan=3)
+down_frame.grid(row=1, column=0, padx=10, pady=0,sticky="ew",columnspan=4)
 
 btnDiv = Frame(screen, bg=bgMain)
-btnDiv.grid(row=2,column=0,padx=10,pady=10,columnspan=3)
+btnDiv.grid(row=2,column=0,padx=10,pady=10,sticky="ew",columnspan=4)
+
+# Add weight to the rows and columns for right_frame
+screen.grid_rowconfigure(0, weight=1)
+screen.grid_columnconfigure(1, weight=1)
+right_frame.grid_rowconfigure(0, weight=1)
+right_frame.grid_columnconfigure(1, weight=1)
+
 
 # Create a listbox to display tracks
 trackBox = Listbox(
@@ -506,10 +513,9 @@ trackBox = Listbox(
     highlightthickness=0,
     selectbackground=accent,
     selectborderwidth=0,
+    width=25
 )
-right_frame.grid_rowconfigure(0, weight=1)
-right_frame.grid_columnconfigure(0, weight=1)
-trackBox.grid(row=0,column=0,sticky="nsew")
+trackBox.grid(row=0, column=0, sticky="nswe")
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -568,7 +574,7 @@ slider = ttk.Scale(
     length=470,
     command=slide,
 )
-slider.pack(pady=10,ipadx=10)
+slider.grid(column=3,pady=10,ipadx=10,columnspan=4)
 
 # Text box for song length
 if not emptyFolder:
