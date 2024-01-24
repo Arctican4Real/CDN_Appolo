@@ -186,17 +186,17 @@ def downloadSong(main):
     defaultColor.close()
 
     if scheme == "BLUE":
-        bgMain = "#171D1C"
-        bgSec = "#252D2D"
-        fgMain = "#F9F9ED"
-        accent = "#3695F5"
+        bgMain = "#1A1C26"
+        bgSec = "#2D2E39"
+        fgMain = "#F4F4F2"
+        accent = "#3498DB"
         col = "Blue"
 
     elif scheme == "GREEN":
-        bgMain = "#1B1C16"
-        bgSec = "#2B2E26"
-        fgMain = "#FAEDF6"
-        accent = "#56F536"
+        bgMain = "#19231A"
+        bgSec = "#2E392A"
+        fgMain = "#F2F8F2"
+        accent = "#4CAF50"
         col = "Green"
 
     elif scheme == "RED":
