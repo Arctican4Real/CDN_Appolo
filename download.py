@@ -153,7 +153,7 @@ def download_button_clicked():
         path, filename=songName + ".mp4"
     )
 
-    status_bar.config(text=f"Changing MP3 files...")
+    status_bar.config(text=f"Changing files to MP3...")
     ws.update_idletasks()
     # This will convert our MP4 to MP3 using that function
     mp4_to_mp3(f"{path}/{songName}.mp4", f"{path}/{artistName}-{songName}.mp3")
@@ -219,6 +219,7 @@ def downloadSong(main):
     ws.title("Search and Retrieve Application")
     # Set the geometry of the main window (width x height)
     ws.geometry("510x325")
+    ws.resizable(0, 0)
     ws.configure(bg=bgMain)
 
     # Create a StringVar to hold the text input value
