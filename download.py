@@ -102,21 +102,30 @@ def submit_button_clicked():
 
 
 def download_button_clicked():
-    status_bar.config(text=f"Starting Download...")
+    status_bar.config(text=f"Finding Track...")
     ws.update_idletasks()
 
-    global topTracksSearchJson
-    # Ask the user which tracks they want, and select it
-    index = results_listbox.curselection() 
-    if not topTracksSearchJson and not index:
-        return
+    # global topTracksSearchJson
+    # # Ask the user which tracks they want, and select it
+    # index = results_listbox.curselection() 
+    # if not topTracksSearchJson and not index:
+    #     return
+    global deezerTrack
 
-    chosenTrack = topTracksSearchJson["data"][index[0]] 
+    #Get currently selected song
+    chosenIndex = results_listbox.curselection()[0]
+    chosenTrack = deezerTrack[chosenIndex]
+
+    # chosenTrack = topTracksSearchJson["data"][index[0]] 
+
+    # This is the song name and artist name, replacing spaces with underscores
+    songName = chosenTrack.title_short.replace(" ", "_")
+    artistName = chosenTrack.artist.name.replace(" ", "_")
 
     # Search for the Artist + Song Name + "Audio" on youtube with pytube
     # Example - "Avicii Waiting for love audio" is searched
     searchList = Search(
-        str(chosenTrack["title_short"] + str(chosenTrack["artist"]["name"])) + " audio"
+        songName + artistName + " audio"
     )
     # Get the first video from search result
     firstResult = str(searchList.results[0])
@@ -134,20 +143,14 @@ def download_button_clicked():
     # Example - "Waiting_for_love"
     path = "./music/" #+ str(chosenTrack["title"]).replace(" ", "_")
 
-    # This is the song name and artist name, replacing spaces with underscores
-    songName = str(chosenTrack["title"]).replace(" ", "_")
-    artistName = str(chosenTrack["artist"]["name"]).replace(" ", "_")
-
     # Make the folder
     # os.mkdir(path)
     status_bar.config(text=f"Downloading song...")
     ws.update_idletasks()
 
-
     # Use the link we found before to download the video at lowest resolution (we only need audio) to the folder
     target = YouTube(finalLink)
 
-    status_bar.config(text=f"Converting to MP3")
     # This downloads the MP4 file inside the folder we made
     target.streams.filter(file_extension="mp4").first().download(
         path, filename=songName + ".mp4"
@@ -163,7 +166,8 @@ def download_button_clicked():
     os.remove(f"{path}/{songName}.mp4")
 
     # These two lines get the cover art of the album from the API, and download it to our folder
-    coverImg = chosenTrack["album"]["cover_big"]
+    coverImg = chosenTrack.album.cover_big
+
 
     status_bar.config(text=f"Getting cover image...")
     ws.update_idletasks()
@@ -173,6 +177,54 @@ def download_button_clicked():
 
     status_bar.config(text=f"Downloading Complete! Click \"Reload Tracks\" on main menu")
 
+def searchButton():
+    status_bar.config(text=f"Searching...")
+    ws.update_idletasks()
+    # Ask for artist
+    query = modify.get()
+
+    #Error handling for empty
+    if len(query) == 0:
+        return
+
+    # Use deezer to search for this artist
+    global deezerTrack
+    deezerTrack = client.search(query)
+
+    # # Get the top tracks from the API (returns JSON format list)
+    # topTracks = deezerArtist.tracklist
+    # topTracksSearch = requests.get(topTracks, headers={"Accept-Language": "en"})
+
+    #Clear listbox
+    results_listbox.delete(0,'end')
+
+    cunt = 0
+    for result in deezerTrack:
+        #Limiting searches to top 50 results
+        if cunt>=50:
+            break
+        results_listbox.insert("end", str(cunt+1)+". "+result.title_short + "-" + result.artist.name)
+        cunt+=1
+
+    # Convert that JSON file to Python Dictionary so we can work with it
+    # global topTracksSearchJson
+    # topTracksSearchJson = json.loads(topTracksSearch.text)
+
+    # if len(topTracksSearchJson)==0:
+    #     messagebox.showerror(
+    #         "No Songs!",
+    #         "Looks like this artist doesn't exist in our registry :(",
+    #     )
+
+    #Enter into
+    # count=1
+    # for entry in topTracksSearchJson["data"]:
+    #     # This line prints the title
+    #     results_listbox.insert("end",str(count) + ". " + entry["title"])
+    #     count+=1
+
+    status_bar.config(text=f"Showing results for \"{query}\"")
+    ws.update_idletasks()
 
 def OnDoubleClick(event):
         item = tree.selection()[0]
@@ -236,7 +288,7 @@ def downloadSong(main):
     global modify
     modify = tk.Entry(ws, textvariable=text,bg=bgSec, fg=fgMain, bd=0,highlightcolor=fgMain,highlightthickness=1)
     # Text entry box and Submit button in the same row
-    modify_label = tk.Label(ws, text="Type artist name",
+    modify_label = tk.Label(ws, text="Type Song Name : ",
         borderwidth=0,
         bg=bgMain,
         fg=fgMain,
@@ -252,7 +304,7 @@ def downloadSong(main):
         bg=accent,
         fg=bgMain,
         highlightthickness=0,
-        bd=0,command=submit_button_clicked)
+        bd=0,command=searchButton)
 
     # Place the button in the grid layout
     buttn.grid(column=2, row=0, padx=5, pady=5)
