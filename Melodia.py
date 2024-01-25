@@ -29,7 +29,7 @@ screen.iconphoto(True, img)
 # Set window properties
 screen.resizable(0, 0)
 # Default 330x550
-screen.geometry("510x470")
+screen.geometry("510x500")
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
