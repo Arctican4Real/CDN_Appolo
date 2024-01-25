@@ -9,12 +9,27 @@ import tkinter.ttk as ttk
 from tkinter import messagebox
 import download
 import webbrowser
+from sys import platform
 
 # Define color constants
 bgMain = "#171D1C"
 bgSec = "#252D2D"
 fgMain = "#F9F9ED"
 accent = "#3695F5"
+
+global USER_OS
+OS_LINUX=1
+OS_MAC=2
+OS_WIN=3
+#Identify operating system
+if platform == "linux":
+    USER_OS = OS_LINUX
+elif platform == "darwin":
+    USER_OS = OS_MAC
+elif platform == "win32":
+    USER_OS = OS_WIN
+
+
 
 #Create the main tkinter screen
 screen = Tk()
@@ -333,7 +348,14 @@ def slide(pos):
 
 #Open folder
 def openFolder():
-    os.system('xdg-open "%s"' % "./music/")
+    print(USER_OS)
+    if USER_OS==OS_LINUX:
+        os.system('xdg-open "%s"' % "./music/")
+    elif USER_OS==OS_WIN:
+        os.startfile('.\\music')
+    elif USER_OS==OS_MAC:
+        pass
+   
 
 
 # Function to change color scheme
@@ -536,8 +558,8 @@ else:
     albumCover = "./sources/template.png"
 
 #Scroll wheel for track box
-scroll = Scrollbar(right_frame, width=10)
-scroll.grid(row=0,column=1,sticky="ns")
+scroll = Scrollbar(screen, width=13)
+scroll.grid(row=0,column=3,sticky="ns",padx=10,pady=10)
 
 #Functionality of the scroll bar
 trackBox.config(yscrollcommand=scroll.set)
