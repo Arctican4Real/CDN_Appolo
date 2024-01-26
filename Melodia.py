@@ -10,6 +10,7 @@ from tkinter import messagebox
 import download
 import webbrowser
 from sys import platform
+import random
 
 # Define color constants
 bgMain = "#1A1C26"
@@ -112,8 +113,12 @@ def changeDur():
         # Show that the song is complete
         durLabel.config(text=f"{convTotLen} / {convTotLen}")
         
-        #Move on to the next song
-        nextTrack(1)
+        #if shuffle mode is on, go to a random song
+        if shuffleState:
+            randSelect()
+        else:
+        #Otherwise, move on to the next song
+            nextTrack(1)
 
     # Else, if its paused, we dont want to do anything
     elif playState == SONG_IS_PAUSED:
@@ -197,20 +202,54 @@ def stop():
     durLabel.config(text=f"00:00")
 
 #Functionality for shuffle button
-def shuffle():
+def shuffleBtnFunc():
     global shuffleState
 
     #If shuffle True, set shuffle false
     if shuffleState:
         shuffleState = False
         shuffleBtn.config(image=shuffleBtnImgGray)
-        print("Shuffle Off")
+        #print("Shuffle Off")
     
     #If shuffle False, set shuffle ture
     else:
         shuffleState = True
         shuffleBtn.config(image=shuffleBtnImg)
-        print("Shuffle On")
+        #print("Shuffle On")
+
+#Random list box selector
+def randSelect() :
+    global playState
+    #Get a random index value for the listbox
+    rand = random.randint(0,trackBox.size()-1)
+    #Clear current selection
+    trackBox.selection_clear(0, END)
+    #Set selection to our random one
+    trackBox.selection_set(rand) # Set the index
+    #Activate the random one
+    trackBox.activate(rand)
+
+    # Get the name of the next track, modify for file path, and update listbox selection
+    playTrack = trackBox.get(rand)
+    playTrack = getSongPath(playTrack)
+
+    # Change the album cover based on the selected track
+    changeCover(rand)
+
+    # Change the current title name, current play time
+    changeName()
+    durLabel.config(text=f"00:00")
+
+    #Set slider back to zero
+    slider.config(value=0)
+
+    # Cancel the currently playing job
+    screen.after_cancel(secLoop)
+
+    # Reset play state and simulate a button click to start playing the new track
+    playState = 0
+    mainBtnFunc(0)
+
 
 # A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
@@ -574,7 +613,9 @@ trackBox = Listbox(
     highlightthickness=0,
     selectbackground=accent,
     selectborderwidth=0,
-    width=25
+    width=25,
+    activestyle="none",
+    selectmode=SINGLE
 )
 trackBox.grid(row=0, column=0, sticky="nswe")
 
@@ -695,7 +736,7 @@ shuffleBtn = Button(
     btnDiv,
     image=shuffleBtnImgGray,
     borderwidth=0,
-    command=shuffle,
+    command=shuffleBtnFunc,
     bg=bgMain,
     highlightthickness=0,
     bd=0,
