@@ -533,7 +533,7 @@ def reloadTracks():
         if name in [".gitignore", "albumCover"]:
             continue
         tracks.append(name)
-    tracks = sorted(tracks)
+    #tracks = sorted(tracks)
 
     global emptyFolder
     if len(tracks) == 0:
