@@ -703,6 +703,8 @@ mainBtn = Button(
     bg=bgMain,
     highlightthickness=0,
     bd=0,
+    relief=SUNKEN,
+    activebackground=bgSec
 )
 stopBtn = Button(
     btnDiv,
@@ -712,6 +714,8 @@ stopBtn = Button(
     bg=bgMain,
     highlightthickness=0,
     bd=0,
+    relief=SUNKEN,
+    activebackground=bgSec
 )
 backBtn = Button(
     btnDiv,
@@ -721,6 +725,8 @@ backBtn = Button(
     bg=bgMain,
     highlightthickness=0,
     bd=0,
+    relief=SUNKEN,
+    activebackground=bgSec
 )
 frontBtn = Button(
     btnDiv,
@@ -730,8 +736,9 @@ frontBtn = Button(
     bg=bgMain,
     highlightthickness=0,
     bd=0,
+    relief=SUNKEN,
+    activebackground=bgSec
 )
-
 shuffleBtn = Button(
     btnDiv,
     image=shuffleBtnImgGray,
@@ -740,6 +747,8 @@ shuffleBtn = Button(
     bg=bgMain,
     highlightthickness=0,
     bd=0,
+    relief=SUNKEN,
+    activebackground=bgSec
 )
 
 # Grid layout for control buttons
