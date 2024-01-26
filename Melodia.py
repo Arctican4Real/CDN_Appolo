@@ -373,6 +373,39 @@ def changeCover(trackNum):
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
+#Function to delete a song
+def delSong():
+    #Stop currently playing song
+    stop()
+
+    #Get path for song and cover
+    curSelect = trackBox.curselection()
+    if not curSelect:
+        messagebox.showerror(
+            "Select Song!",
+            "You must select the song to delete it"
+            )
+        return
+
+    selected = trackBox.get(curSelect[0])
+    selectedPath = getSongPath(selected)
+
+    selectedCoverPath = selectedPath.replace("./music/" , "").replace(".mp3", "")
+    selectedCoverPath = f"./music/albumCover/{selectedCoverPath}-cover.jpg"
+
+    #Delete cover, then image
+    os.remove(selectedCoverPath)
+    os.remove(selectedPath)
+
+    #Change album cover
+    curCover = Image.open("./sources/template.png")
+    curCover = curCover.resize((250, 250), Image.LANCZOS)
+    curCover = ImageTk.PhotoImage(curCover)
+    curCoverLabel.configure(image=curCover)
+
+    #Reload track list
+    reloadTracks()
+
 
 # Function to get song name
 def getSongName(path):
@@ -568,11 +601,15 @@ screen.config(menu=settings)
 downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0,tearoff="off")
 settings.add_cascade(label="Download", menu=downloadMenu)
 
-#Button to download songs
+# Button to download songs
 downloadMenu.add_command(label="Get Song", command=lambda:download.downloadSong(screen))
 # Button to reload the tracks
 downloadMenu.add_command(label="Reload Tracks", command=reloadTracks)
+# Add folder button
 downloadMenu.add_command(label="Open Folder", command=openFolder)
+# Delete song
+downloadMenu.add_command(label="Delete Song", command=delSong)
+
 
 # Code for themes button on menu bar
 themeMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0, tearoff="off")
