@@ -12,10 +12,11 @@ import webbrowser
 from sys import platform
 
 # Define color constants
-bgMain = "#171D1C"
-bgSec = "#252D2D"
-fgMain = "#F9F9ED"
-accent = "#3695F5"
+bgMain = "#1A1C26"
+bgSec = "#2D2E39"
+fgMain = "#F4F4F2"
+accent = "#3498DB"
+
 
 global USER_OS
 OS_LINUX=1
@@ -44,16 +45,19 @@ screen.resizable(0, 0)
 # Default 330x550
 screen.geometry("510x500")
 
-# Initialize the Pygame mixer
-pygame.mixer.init()
-
 # Load control button images
-global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg
+global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg
 playBtnImg = PhotoImage(file="./sources/ctrlbtn/playBtnImgBlue.png")
 pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pauseBtnImgBlue.png")
 stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stopBtnImgBlue.png")
 frontBtnImg = PhotoImage(file="./sources/ctrlbtn/frontBtnImgBlue.png")
 backBtnImg = PhotoImage(file="./sources/ctrlbtn/backBtnImgBlue.png")
+shuffleBtnImg = PhotoImage(file="./sources/ctrlbtn/shuffleBtnImgBlue.png")
+
+#Shuffle button greyed out
+global shuffleBtnImgGray
+shuffleBtnImgGray = PhotoImage(file="./sources/ctrlbtn/shuffleBtnImgGray.png")
+
 
 # Initialize global variable for play state, as well as what play state means
 global playState
@@ -63,6 +67,13 @@ SONG_IS_PAUSED = 2
 
 # Initially, we dont want teh song to be playing
 playState = SONG_NOT_PLAYING
+
+#Global variable for shuffle
+global shuffleState
+shuffleState = False
+
+# Initialize the Pygame mixer
+pygame.mixer.init()
 
 # Various functions used in the program
 # Function to change song duration (and auto play)
@@ -184,6 +195,22 @@ def stop():
     mainBtn.photo = playBtnImg
     slider.config(value=0)
     durLabel.config(text=f"00:00")
+
+#Functionality for shuffle button
+def shuffle():
+    global shuffleState
+
+    #If shuffle True, set shuffle false
+    if shuffleState:
+        shuffleState = False
+        shuffleBtn.config(image=shuffleBtnImgGray)
+        print("Shuffle Off")
+    
+    #If shuffle False, set shuffle ture
+    else:
+        shuffleState = True
+        shuffleBtn.config(image=shuffleBtnImg)
+        print("Shuffle On")
 
 # A function that controls teh working of the main play button
 def mainBtnFunc(mainQuery):
@@ -410,13 +437,14 @@ def changeColor(scheme):
     curCoverLabel.config(highlightbackground=bgSec)
 
     # Change the file we're using for the images (it will now default to these)
-    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg
+    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg
 
     playBtnImg = PhotoImage(file=f"./sources/ctrlbtn/playBtnImg{col}.png")
     pauseBtnImg = PhotoImage(file=f"./sources/ctrlbtn/pauseBtnImg{col}.png")
     stopBtnImg = PhotoImage(file=f"./sources/ctrlbtn/stopBtnImg{col}.png")
     frontBtnImg = PhotoImage(file=f"./sources/ctrlbtn/frontBtnImg{col}.png")
     backBtnImg = PhotoImage(file=f"./sources/ctrlbtn/backBtnImg{col}.png")
+    shuffleBtnImg = PhotoImage(file=f"./sources/ctrlbtn/shuffleBtnImg{col}.png")
 
     # Change the button images
 
@@ -430,6 +458,12 @@ def changeColor(scheme):
         mainBtn.configure(image=playBtnImg)
         #Stop Garbage collection
         mainBtn.photo = playBtnImg
+
+    #if shuffle is on, change the image
+    if shuffleState:
+        shuffleBtn.configure(image=shuffleBtnImg)
+        #Stop Garbage collection
+        shuffleBtn.photo = shuffleBtnImg
 
     stopBtn.configure(image=stopBtnImg)
     frontBtn.configure(image=frontBtnImg)
@@ -530,7 +564,6 @@ screen.grid_rowconfigure(0, weight=1)
 screen.grid_columnconfigure(1, weight=1)
 right_frame.grid_rowconfigure(0, weight=1)
 right_frame.grid_columnconfigure(1, weight=1)
-
 
 # Create a listbox to display tracks
 trackBox = Listbox(
@@ -658,11 +691,23 @@ frontBtn = Button(
     bd=0,
 )
 
+shuffleBtn = Button(
+    btnDiv,
+    image=shuffleBtnImgGray,
+    borderwidth=0,
+    command=shuffle,
+    bg=bgMain,
+    highlightthickness=0,
+    bd=0,
+)
+
 # Grid layout for control buttons
-backBtn.grid(row=0, column=0, padx=(60,60), pady=(0,10))
+backBtn.grid(row=0, column=0, padx=(10,60), pady=(0,10))
 mainBtn.grid(row=0, column=1, padx=(0,60), pady=(0,10))
 stopBtn.grid(row=0, column=2, padx=(0,60), pady=(0,10))
 frontBtn.grid(row=0, column=3, padx=(0,60), pady=(0,10))
+shuffleBtn.grid(row=0, column=4, padx=(0,10), pady=(0,10))
+
 
 # A list containing elements which use saved colors
 bgMainBgList = [
@@ -677,6 +722,7 @@ bgMainBgList = [
     stopBtn,
     backBtn,
     frontBtn,
+    shuffleBtn,
     settings,
     left_frame,
     right_frame,
