@@ -288,7 +288,7 @@ def downloadSong(main):
     global modify
     modify = tk.Entry(ws, textvariable=text,bg=bgSec, fg=fgMain, bd=0,highlightcolor=fgMain,highlightthickness=1)
     # Text entry box and Submit button in the same row
-    modify_label = tk.Label(ws, text="Type Song/Artist Name : ",
+    modify_label = tk.Label(ws, text="Search : ",
         borderwidth=0,
         bg=bgMain,
         fg=fgMain,

@@ -29,8 +29,6 @@ elif platform == "darwin":
 elif platform == "win32":
     USER_OS = OS_WIN
 
-
-
 #Create the main tkinter screen
 screen = Tk()
 screen.title("Melodia")
@@ -102,7 +100,9 @@ def changeDur():
     if int(slider.get()) == int(songLen):
         # Show that the song is complete
         durLabel.config(text=f"{convTotLen} / {convTotLen}")
-        stop()
+        
+        #Move on to the next song
+        nextTrack(1)
 
     # Else, if its paused, we dont want to do anything
     elif playState == SONG_IS_PAUSED:
@@ -355,8 +355,6 @@ def openFolder():
         os.startfile('.\\music')
     elif USER_OS==OS_MAC:
         pass
-   
-
 
 # Function to change color scheme
 def changeColor(scheme):
@@ -480,8 +478,12 @@ def reloadTracks():
         name = name.replace(".mp3", "")
         name = name.replace("_", " ")
         trackBox.insert("end", name)
+
+#Link to github page
 def openGithub():
     webbrowser.open('https://github.com/Arctican4Real/Melodia')
+
+#Auto play capability
 
 ### UI CODE ###
 
@@ -598,9 +600,12 @@ slider = ttk.Scale(
     orient=HORIZONTAL,
     value=0,
     length=470,
-    command=slide,
+    #command=slide,
 )
 slider.grid(column=3,pady=10,ipadx=10,columnspan=4)
+
+#Only trigger the slide event when slider stops moving
+slider.bind("<ButtonRelease-1>", slide)
 
 # Text box for song length
 if not emptyFolder:
