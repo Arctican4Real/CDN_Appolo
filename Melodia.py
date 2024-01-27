@@ -711,6 +711,30 @@ durLabel = Label(
 
 durLabel.grid(row=2,column=0, columnspan=1,pady=10)
 
+# Volume control button
+volSlider = ttk.Scale(
+    left_frame,
+    from_=0,
+    to=100,
+    orient=HORIZONTAL,
+    value=100,
+    )
+volSlider.grid(column=0, row=4, sticky="ew")
+
+volSliderLabel = Label(
+    left_frame,
+    text="100%",
+    borderwidth=0,
+    highlightthickness=0,
+    bd=0,
+    bg=bgMain,
+    fg=fgMain,
+    #width=3,
+    #height=1,
+    font=("Arial", 10),
+    )
+volSliderLabel.grid(column=1, row=4, sticky="ew", padx=(5,0))
+
 # Slider for song duration
 slider = ttk.Scale(
     down_frame,
@@ -822,7 +846,8 @@ bgMainBgList = [
     left_frame,
     right_frame,
     down_frame,
-    btnDiv
+    btnDiv,
+    volSliderLabel
 ]
 fgMainFgList = [trackBox, settings, downloadMenu, themeMenu, durLabel]
 bgSecBgList = [settings]
