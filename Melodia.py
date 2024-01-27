@@ -221,7 +221,10 @@ def shuffleBtnFunc():
 def randSelect() :
     global playState
     #Get a random index value for the listbox
+    #Make this not the same as current selection
     rand = random.randint(0,trackBox.size()-1)
+    while rand == trackBox.curselection()[0]:
+        rand = random.randint(0,trackBox.size()-1)
     #Clear current selection
     trackBox.selection_clear(0, END)
     #Set selection to our random one
