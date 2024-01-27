@@ -1,4 +1,4 @@
-#  ![Sample Image](./sources/icon.png?raw=true "Sample Image")   Melodia 
+#  ![Sample Image](./sources/icon1.png?raw=true "Sample Image")   Melodia 
 **Python based music player app.** 
 
 ## Project Description
