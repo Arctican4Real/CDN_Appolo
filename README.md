@@ -1,6 +1,5 @@
 # Melodia
-
-**Python based music player app.**
+| ![Sample Image](./sources/icon.ico?raw=true "Sample Image")  | **Python based music player app.** |
 
 ## Project Description
 
