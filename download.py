@@ -226,10 +226,6 @@ def searchButton():
     status_bar.config(text=f"Showing results for \"{query}\"")
     ws.update_idletasks()
 
-def OnDoubleClick(event):
-        item = tree.selection()[0]
-        chosenTrack =item
-
 #This is the code for our new window
 def downloadSong(main):
     #Generate scheme
@@ -268,7 +264,7 @@ def downloadSong(main):
     # Create main window
     global ws
     ws = tk.Toplevel(main)
-    ws.title("Search and Retrieve Application")
+    ws.title("Download Song")
     # Set the geometry of the main window (width x height)
     ws.geometry("510x325")
     ws.resizable(0, 0)
