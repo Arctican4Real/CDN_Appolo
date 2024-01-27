@@ -36,6 +36,10 @@ screen = Tk()
 screen.title("Melodia")
 screen.configure(bg=bgMain)
 
+#Modify the width of ttk slider (its too fat)
+s = ttk.Style()
+s.configure("Horizontal.TScale",sliderthickness=12)
+
 # Import and display program icon
 img = PhotoImage(file="./sources/icon.gif")
 screen.tk.call("wm", "iconphoto", screen._w, img)
@@ -44,7 +48,7 @@ screen.iconphoto(True, img)
 # Set window properties
 screen.resizable(0, 0)
 # Default 330x550
-screen.geometry("510x500")
+screen.geometry("510x470")
 
 # Load control button images
 global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg
@@ -593,6 +597,13 @@ def reloadTracks():
         name = name.replace("_", " ")
         trackBox.insert("end", name)
 
+#Volume slider funtion
+def volSliderFunc(x):
+    vol= volSlider.get()
+    pygame.mixer.music.set_volume(volSlider.get())
+    #volSliderLabel.config(text=f"{int(pygame.mixer.music.get_volume()*100)}%")
+    pass
+
 #Link to github page
 def openGithub():
     webbrowser.open('https://github.com/Arctican4Real/Melodia')
@@ -632,10 +643,10 @@ settings.add_command(label="Github", command=openGithub)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
-left_frame.grid(row=0, column=0, padx=(10,0), pady=10, sticky="nsew")
+left_frame.grid(row=0, column=0, padx=(10,0), pady=(10,0), sticky="nsew")
 
 right_frame = Frame(screen, bg=bgMain)
-right_frame.grid(row=0, column=1, padx=(10,10), pady=(10,20), sticky="nsew")
+right_frame.grid(row=0, column=1, padx=(0,10), pady=(10,0), sticky="nsew")
 
 down_frame = Frame(screen, bg=bgMain)
 down_frame.grid(row=1, column=0, padx=10, pady=0,sticky="ew",columnspan=4)
@@ -658,11 +669,11 @@ trackBox = Listbox(
     highlightthickness=0,
     selectbackground=accent,
     selectborderwidth=0,
-    width=25,
+    width=30,
     activestyle="none",
     selectmode=SINGLE
 )
-trackBox.grid(row=0, column=0, sticky="nswe")
+trackBox.grid(row=0, column=0, sticky="nsew", padx=10,pady=10)
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -678,13 +689,33 @@ if not emptyFolder:
 else:
     albumCover = "./sources/template.png"
 
-#Scroll wheel for track box
-scroll = Scrollbar(screen, width=13)
-scroll.grid(row=0,column=3,sticky="ns",padx=10,pady=10)
+# volSliderLabel = Label(
+#     left_frame,
+#     text="100%",
+#     borderwidth=0,
+#     highlightthickness=0,
+#     bd=0,
+#     bg=bgMain,
+#     fg=fgMain,
+#     width=5,
+#     #height=1,
+#     font=("Arial", 12),
+#     )
+#volSliderLabel.grid(column=0, row=4, padx=(5,0),pady=5)
 
-#Functionality of the scroll bar
-trackBox.config(yscrollcommand=scroll.set)
-scroll.config(command=trackBox.yview)
+# Volume control Slider
+volSlider = ttk.Scale(
+    left_frame,
+    from_=1,
+    to=0,
+    orient=VERTICAL,
+    value=100,
+    length=290,
+    command=volSliderFunc
+    )
+s=ttk.Style()
+s.configure("Vertical.TScale",sliderthickness=10)
+volSlider.grid(column=0,row=0,padx=5,pady=(10,0),rowspan=2)
 
 #Cover art
 global curCover
@@ -693,7 +724,7 @@ curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
 curCoverLabel = Label(left_frame,image=curCover, borderwidth=0, highlightthickness=4, highlightbackground=bgSec, bg=bgMain)
-curCoverLabel.grid(pady=10,column=0,row=0)
+curCoverLabel.grid(pady=10,column=1,row=0)
 
 # Display the song duration
 durLabel = Label(
@@ -709,31 +740,7 @@ durLabel = Label(
     font=("Arial", 16),
 )
 
-durLabel.grid(row=2,column=0, columnspan=1,pady=10)
-
-# Volume control button
-volSlider = ttk.Scale(
-    left_frame,
-    from_=0,
-    to=100,
-    orient=HORIZONTAL,
-    value=100,
-    )
-volSlider.grid(column=0, row=4, sticky="ew")
-
-volSliderLabel = Label(
-    left_frame,
-    text="100%",
-    borderwidth=0,
-    highlightthickness=0,
-    bd=0,
-    bg=bgMain,
-    fg=fgMain,
-    #width=3,
-    #height=1,
-    font=("Arial", 10),
-    )
-volSliderLabel.grid(column=1, row=4, sticky="ew", padx=(5,0))
+durLabel.grid(row=2,column=1, columnspan=1,pady=10)
 
 # Slider for song duration
 slider = ttk.Scale(
@@ -745,7 +752,7 @@ slider = ttk.Scale(
     length=470,
     #command=slide,
 )
-slider.grid(column=3,pady=10,ipadx=10,columnspan=4)
+slider.grid(column=3,pady=0,ipadx=10,columnspan=4)
 
 #Only trigger the slide event when slider stops moving
 slider.bind("<ButtonRelease-1>", slide)
@@ -759,7 +766,7 @@ else:
 
 # Display the current song name
 curTitle = Label(left_frame, text=firstTrack, bd=1, bg=accent, fg=bgMain)
-curTitle.grid(row=1,column=0, ipady=0, pady=0,sticky="ew")
+curTitle.grid(row=1,column=1, ipady=0, pady=0,sticky="ew")
 
 #Buttons
 
@@ -831,7 +838,6 @@ shuffleBtn.grid(row=0, column=4, padx=(0,10), pady=(0,10))
 # A list containing elements which use saved colors
 bgMainBgList = [
     screen,
-    trackBox,
     downloadMenu,
     themeMenu,
     durLabel,
@@ -847,10 +853,10 @@ bgMainBgList = [
     right_frame,
     down_frame,
     btnDiv,
-    volSliderLabel
+    #volSliderLabel
 ]
 fgMainFgList = [trackBox, settings, downloadMenu, themeMenu, durLabel]
-bgSecBgList = [settings]
+bgSecBgList = [settings,trackBox]
 
 # Get the default color
 defaultColor = open("./config/COLOR.txt", "rt")
