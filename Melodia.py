@@ -334,6 +334,11 @@ def nextTrack(move):
     # Stop the currently playing song
     stop()
 
+    # If shuffle is on, just move to a shuffled song
+    if shuffleState:
+        randSelect()
+        return
+
     global playState
 
     # Calculate the index of the next track based on the movement direction
