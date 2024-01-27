@@ -716,7 +716,7 @@ volSlider = ttk.Scale(
     )
 s=ttk.Style()
 s.configure("Vertical.TScale",sliderthickness=10)
-volSlider.grid(column=0,row=0,padx=5,pady=(10,0),rowspan=2)
+volSlider.grid(column=0,row=0,padx=5,pady=(5,5),rowspan=2)
 
 #Cover art
 global curCover
