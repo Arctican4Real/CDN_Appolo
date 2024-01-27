@@ -643,10 +643,10 @@ settings.add_command(label="Github", command=openGithub)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
-left_frame.grid(row=0, column=0, padx=(10,0), pady=(10,0), sticky="nsew")
+left_frame.grid(row=0, column=0, padx=(10,0), pady=(0,0), sticky="ew")
 
 right_frame = Frame(screen, bg=bgMain)
-right_frame.grid(row=0, column=1, padx=(0,10), pady=(10,0), sticky="nsew")
+right_frame.grid(row=0, column=1, padx=(0,10), pady=(0,0), sticky="ew")
 
 down_frame = Frame(screen, bg=bgMain)
 down_frame.grid(row=1, column=0, padx=10, pady=0,sticky="ew",columnspan=4)
@@ -670,10 +670,11 @@ trackBox = Listbox(
     selectbackground=accent,
     selectborderwidth=0,
     width=30,
+    height=20,
     activestyle="none",
     selectmode=SINGLE
 )
-trackBox.grid(row=0, column=0, sticky="nsew", padx=10,pady=10)
+trackBox.grid(row=0, column=0, sticky="ew", padx=10,pady=(21,30))
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -724,7 +725,7 @@ curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
 curCoverLabel = Label(left_frame,image=curCover, borderwidth=0, highlightthickness=4, highlightbackground=bgSec, bg=bgMain)
-curCoverLabel.grid(pady=10,column=1,row=0)
+curCoverLabel.grid(pady=0,column=1,row=0)
 
 # Display the song duration
 durLabel = Label(
