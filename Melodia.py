@@ -48,16 +48,17 @@ screen.iconphoto(True, img)
 # Set window properties
 screen.resizable(0, 0)
 # Default 330x550
-screen.geometry("510x470")
+screen.geometry("540x480")
 
 # Load control button images
-global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg
+global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg, volIcon
 playBtnImg = PhotoImage(file="./sources/ctrlbtn/playBtnImgBlue.png")
 pauseBtnImg = PhotoImage(file="./sources/ctrlbtn/pauseBtnImgBlue.png")
 stopBtnImg = PhotoImage(file="./sources/ctrlbtn/stopBtnImgBlue.png")
 frontBtnImg = PhotoImage(file="./sources/ctrlbtn/frontBtnImgBlue.png")
 backBtnImg = PhotoImage(file="./sources/ctrlbtn/backBtnImgBlue.png")
 shuffleBtnImg = PhotoImage(file="./sources/ctrlbtn/shuffleBtnImgBlue.png")
+volIcon = PhotoImage(file="./sources/ctrlbtn/volContBlue.png")
 
 #Shuffle button greyed out
 global shuffleBtnImgGray
@@ -521,7 +522,7 @@ def changeColor(scheme):
     curCoverLabel.config(highlightbackground=bgSec)
 
     # Change the file we're using for the images (it will now default to these)
-    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg
+    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg,volIcon
 
     playBtnImg = PhotoImage(file=f"./sources/ctrlbtn/playBtnImg{col}.png")
     pauseBtnImg = PhotoImage(file=f"./sources/ctrlbtn/pauseBtnImg{col}.png")
@@ -529,6 +530,7 @@ def changeColor(scheme):
     frontBtnImg = PhotoImage(file=f"./sources/ctrlbtn/frontBtnImg{col}.png")
     backBtnImg = PhotoImage(file=f"./sources/ctrlbtn/backBtnImg{col}.png")
     shuffleBtnImg = PhotoImage(file=f"./sources/ctrlbtn/shuffleBtnImg{col}.png")
+    volIcon= PhotoImage(file=f"./sources/ctrlbtn/volCont{col}.png")
 
     # Change the button images
 
@@ -552,6 +554,7 @@ def changeColor(scheme):
     stopBtn.configure(image=stopBtnImg)
     frontBtn.configure(image=frontBtnImg)
     backBtn.configure(image=backBtnImg)
+    volSliderLabel.configure(image=volIcon)
 
     # Stop garbage collection (if this code is not here,
     # the loaded images are deleted before they are used)
@@ -559,6 +562,7 @@ def changeColor(scheme):
     stopBtn.photo = stopBtnImg
     frontBtn.photo = frontBtnImg
     backBtn.photo = backBtnImg
+    volSliderLabel.photo = volIcon
 
     # Change this to new default
     defaultColor = open("./config/COLOR.txt", "r+")
@@ -644,16 +648,16 @@ settings.add_command(label="Github", command=openGithub)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
-left_frame.grid(row=0, column=0, padx=(10,0), pady=(0,0), sticky="ew")
+left_frame.grid(row=0, column=1, padx=(0,10), pady=(0,0), sticky="ew")
 
 right_frame = Frame(screen, bg=bgMain)
-right_frame.grid(row=0, column=1, padx=(0,10), pady=(0,0), sticky="ew")
+right_frame.grid(row=0, column=2, padx=(0,10), pady=(0,0), sticky="ew")
 
 down_frame = Frame(screen, bg=bgMain)
-down_frame.grid(row=1, column=0, padx=10, pady=0,sticky="ew",columnspan=4)
+down_frame.grid(row=1, column=0, padx=22, pady=0,sticky="ew",columnspan=4)
 
 btnDiv = Frame(screen, bg=bgMain)
-btnDiv.grid(row=2,column=0,padx=10,pady=10,sticky="ew",columnspan=4)
+btnDiv.grid(row=2,column=0,padx=22,pady=10,sticky="ew",columnspan=4)
 
 # Add weight to the rows and columns for right_frame
 screen.grid_rowconfigure(0, weight=1)
@@ -670,12 +674,12 @@ trackBox = Listbox(
     highlightthickness=0,
     selectbackground=accent,
     selectborderwidth=0,
-    width=30,
-    height=20,
+    width=28,
+    height=18,
     activestyle="none",
     selectmode=SINGLE
 )
-trackBox.grid(row=0, column=0, sticky="ew", padx=10,pady=(21,30))
+trackBox.grid(row=0, column=0, sticky="ew", padx=0,pady=(21,30))
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -691,23 +695,23 @@ if not emptyFolder:
 else:
     albumCover = "./sources/template.png"
 
-# volSliderLabel = Label(
-#     left_frame,
-#     text="100%",
-#     borderwidth=0,
-#     highlightthickness=0,
-#     bd=0,
-#     bg=bgMain,
-#     fg=fgMain,
-#     width=5,
-#     #height=1,
-#     font=("Arial", 12),
-#     )
-#volSliderLabel.grid(column=0, row=4, padx=(5,0),pady=5)
+volSliderFrame=Frame(screen, bg=bgMain)
+volSliderFrame.grid(row=0,column=0,padx=5)
+
+volSliderLabel = Label(
+    volSliderFrame,
+    borderwidth=0,
+    highlightthickness=0,
+    bd=0,
+    bg=bgMain,
+    fg=fgMain,
+    image=volIcon
+    )
+volSliderLabel.grid(column=0, row=2)
 
 # Volume control Slider
 volSlider = ttk.Scale(
-    left_frame,
+    volSliderFrame,
     from_=1,
     to=0,
     orient=VERTICAL,
@@ -717,7 +721,7 @@ volSlider = ttk.Scale(
     )
 s=ttk.Style()
 s.configure("Vertical.TScale",sliderthickness=10)
-volSlider.grid(column=0,row=0,padx=5,pady=(5,5),rowspan=2)
+volSlider.grid(column=0,row=0,pady=(0,10),sticky="ns")
 
 #Cover art
 global curCover
@@ -855,7 +859,8 @@ bgMainBgList = [
     right_frame,
     down_frame,
     btnDiv,
-    #volSliderLabel
+    volSliderLabel,
+    volSliderFrame
 ]
 fgMainFgList = [trackBox, settings, downloadMenu, themeMenu, durLabel]
 bgSecBgList = [settings,trackBox]
