@@ -416,9 +416,14 @@ def delSong():
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
+    #Garbage collection
+    curCoverLabel.photo=curCover
+
     #Reload track list
     reloadTracks()
 
+    # #Move to next track 
+    # nextTrack(1)
 
 # Function to get song name
 def getSongName(path):
