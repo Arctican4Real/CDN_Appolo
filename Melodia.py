@@ -602,7 +602,8 @@ def volSliderFunc(x):
     vol= volSlider.get()
     pygame.mixer.music.set_volume(volSlider.get())
     #volSliderLabel.config(text=f"{int(pygame.mixer.music.get_volume()*100)}%")
-    pass
+    # printpygame.mixer.music.get_volume()
+    # pass
 
 #Link to github page
 def openGithub():
