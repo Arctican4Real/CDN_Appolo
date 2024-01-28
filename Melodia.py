@@ -648,7 +648,7 @@ settings.add_command(label="Github", command=openGithub)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
-left_frame.grid(row=0, column=1, padx=(0,10), pady=(0,0), sticky="ew")
+left_frame.grid(row=0, column=1, padx=(0,5), pady=(0,0), sticky="ew")
 
 right_frame = Frame(screen, bg=bgMain)
 right_frame.grid(row=0, column=2, padx=(0,10), pady=(0,0), sticky="ew")
@@ -730,7 +730,7 @@ curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
 curCoverLabel = Label(left_frame,image=curCover, borderwidth=0, highlightthickness=4, highlightbackground=bgSec, bg=bgMain)
-curCoverLabel.grid(pady=0,column=1,row=0)
+curCoverLabel.grid(pady=10,column=1,row=0)
 
 # Display the song duration
 durLabel = Label(
