@@ -83,7 +83,7 @@ pygame.mixer.init()
 
 # Various functions used in the program
 # Function to change song duration (and auto play)
-def changeDur():
+def master():
     global tracks
     global playState
 
@@ -147,7 +147,7 @@ def changeDur():
 
     # Run this again and again after 1 second
     global secLoop
-    secLoop = screen.after(1000, changeDur)
+    secLoop = screen.after(1000, master)
 
 
 # Get length of song length
@@ -301,7 +301,7 @@ def mainBtnFunc(mainQuery):
         changeName()
 
         # Run the song duration fucntion when first played
-        changeDur()
+        master()
 
     # If the play state is 1 (playing)
     elif playState == SONG_IS_PLAYING:
