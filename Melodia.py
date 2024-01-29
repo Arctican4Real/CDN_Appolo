@@ -18,7 +18,6 @@ bgSec = "#2D2E39"
 fgMain = "#F4F4F2"
 accent = "#3498DB"
 
-
 global USER_OS
 OS_LINUX=1
 OS_MAC=2
@@ -26,10 +25,14 @@ OS_WIN=3
 #Identify operating system
 if platform == "linux":
     USER_OS = OS_LINUX
+    #Optimal Trackbox width is different 
+    # for different operating systems
+    TBWidth= 28
 elif platform == "darwin":
     USER_OS = OS_MAC
 elif platform == "win32":
     USER_OS = OS_WIN
+    TBWidth= 35
 
 #Create the main tkinter screen
 screen = Tk()
@@ -685,7 +688,7 @@ trackBox = Listbox(
     highlightthickness=0,
     selectbackground=accent,
     selectborderwidth=0,
-    width=35,
+    width=TBWidth,
     height=18,
     activestyle="none",
     selectmode=SINGLE
