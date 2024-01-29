@@ -38,7 +38,9 @@ screen.configure(bg=bgMain)
 
 #Modify the width of ttk slider (its too fat)
 s = ttk.Style()
-s.configure("Horizontal.TScale",sliderthickness=12)
+s.configure("Horizontal.TScale",sliderthickness=8)
+s.configure("Vertical.TScale",background=bgMain)
+s.configure("Horizontal.TScale",background=bgMain)
 
 # Import and display program icon
 img = PhotoImage(file="./sources/icon.gif")
@@ -569,6 +571,10 @@ def changeColor(scheme):
     backBtn.photo = backBtnImg
     volSliderLabel.photo = volIcon
 
+    #Change the background color of the slider
+    s.configure("Vertical.TScale",background=bgMain)
+    s.configure("Horizontal.TScale",background=bgMain)
+
     # Change this to new default
     defaultColor = open("./config/COLOR.txt", "r+")
     # Erase the file
@@ -679,7 +685,7 @@ trackBox = Listbox(
     highlightthickness=0,
     selectbackground=accent,
     selectborderwidth=0,
-    width=28,
+    width=35,
     height=18,
     activestyle="none",
     selectmode=SINGLE
