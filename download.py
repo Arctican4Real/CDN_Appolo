@@ -118,9 +118,9 @@ def download_button_clicked():
 
     # chosenTrack = topTracksSearchJson["data"][index[0]] 
 
-    # This is the song name and artist name, replacing spaces with underscores
-    songName = chosenTrack.title_short.replace(" ", "_")
-    artistName = chosenTrack.artist.name.replace(" ", "_")
+    # This is the song name and artist name, replacing spaces and slashes with underscores
+    songName = chosenTrack.title_short.replace(" ", "_").replace("/","_")
+    artistName = chosenTrack.artist.name.replace(" ", "_").replace("/","_")
 
     # Search for the Artist + Song Name + "Audio" on youtube with pytube
     # Example - "Avicii Waiting for love audio" is searched
