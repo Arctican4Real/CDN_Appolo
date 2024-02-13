@@ -35,6 +35,10 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter.ttk import *
 
+#Library for adding cover art to mp3
+import eyed3
+from eyed3.id3.frames import ImageFrame
+
 
 # Get the App id and app secret
 try :
@@ -99,6 +103,23 @@ def submit_button_clicked():
         # This line prints the title
         results_listbox.insert("end",str(count) + ". " + entry["title"])
         count+=1
+
+#This function modifies the mp3 to add album cover art
+def addAlbumCover(audio,image, title, albumName, artist):
+    audiofile = eyed3.load(audio)
+    if (audiofile.tag == None):
+        audiofile.initTag()
+
+    audiofile.tag.images.set(3, open(image, 'rb').read(), 'image/jpeg')
+
+    audiofile.tag.save()
+
+    audiofile.tag.title = title
+    audiofile.tag.album = albumName
+    audiofile.tag.album_artist = artist
+
+    audiofile.tag.save(version=eyed3.id3.ID3_V2_3)
+
 
 
 def download_button_clicked():
@@ -174,6 +195,11 @@ def download_button_clicked():
     # This will save the cover image as "./Downloads/ARTISTNAME-SONGNAME-COVER.jpg"
     # Example - ./Downloads/Avicii-Waiting_for_love-cover.jpg
     urllib.request.urlretrieve(coverImg, f"{path}/albumCover/{artistName}-{songName}-cover.jpg")
+
+    #Change the cover art of the mp3
+    audio = f"{path}/{artistName}-{songName}.mp3"
+    image = f"{path}/albumCover/{artistName}-{songName}-cover.jpg"
+    addAlbumCover(audio,image,chosenTrack.title_short,chosenTrack.album.title,chosenTrack.artist.name)
 
     status_bar.config(text=f"Downloading Complete! Click \"Reload Tracks\" on main menu")
 
