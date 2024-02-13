@@ -48,7 +48,7 @@ try :
 except KeyError:
     print("FATAL ERROR :")
     print("Uh Oh! You don't have an API key, so I can't access Deezer!")
-    print("Did you copy passcode.py into the main folder?")
+    print("Did you get a env file with API keys")
     raise SystemExit(0)
 
 # Log into deezer with our app id (username) and password(app secret)
@@ -139,9 +139,13 @@ def download_button_clicked():
 
     # chosenTrack = topTracksSearchJson["data"][index[0]] 
 
+    # This is the song name and artist name, replacing spaces with underscores, and replace the /
+    songName = chosenTrack.title_short.replace(" ", "_").replace("/","-")
+    artistName = chosenTrack.artist.name.replace(" ", "_").replace("/","-")
     # This is the song name and artist name, replacing spaces and slashes with underscores
     songName = chosenTrack.title_short.replace(" ", "_").replace("/","_")
     artistName = chosenTrack.artist.name.replace(" ", "_").replace("/","_")
+
 
     # Search for the Artist + Song Name + "Audio" on youtube with pytube
     # Example - "Avicii Waiting for love audio" is searched
