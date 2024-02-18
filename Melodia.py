@@ -19,31 +19,31 @@ fgMain = "#F4F4F2"
 accent = "#3498DB"
 
 global USER_OS
-OS_LINUX=1
-OS_MAC=2
-OS_WIN=3
-#Identify operating system
+OS_LINUX = 1
+OS_MAC = 2
+OS_WIN = 3
+# Identify operating system
 if platform == "linux":
     USER_OS = OS_LINUX
-    #Optimal Trackbox width is different 
+    # Optimal Trackbox width is different
     # for different operating systems
-    TBWidth= 28
+    TBWidth = 28
 elif platform == "darwin":
     USER_OS = OS_MAC
 elif platform == "win32":
     USER_OS = OS_WIN
-    TBWidth= 35
+    TBWidth = 35
 
-#Create the main tkinter screen
+# Create the main tkinter screen
 screen = Tk()
 screen.title("Melodia")
 screen.configure(bg=bgMain)
 
-#Modify the width of ttk slider (its too fat)
+# Modify the width of ttk slider (its too fat)
 s = ttk.Style()
-s.configure("Horizontal.TScale",sliderthickness=8)
-s.configure("Vertical.TScale",background=bgMain)
-s.configure("Horizontal.TScale",background=bgMain)
+s.configure("Horizontal.TScale", sliderthickness=8)
+s.configure("Vertical.TScale", background=bgMain)
+s.configure("Horizontal.TScale", background=bgMain)
 
 # Import and display program icon
 img = PhotoImage(file="./sources/icon.gif")
@@ -65,7 +65,7 @@ backBtnImg = PhotoImage(file="./sources/ctrlbtn/backBtnImgBlue.png")
 shuffleBtnImg = PhotoImage(file="./sources/ctrlbtn/shuffleBtnImgBlue.png")
 volIcon = PhotoImage(file="./sources/ctrlbtn/volContBlue.png")
 
-#Shuffle button greyed out
+# Shuffle button greyed out
 global shuffleBtnImgGray
 shuffleBtnImgGray = PhotoImage(file="./sources/ctrlbtn/shuffleBtnImgGray.png")
 
@@ -79,7 +79,7 @@ SONG_IS_PAUSED = 2
 # Initially, we dont want teh song to be playing
 playState = SONG_NOT_PLAYING
 
-#Global variable for shuffle
+# Global variable for shuffle
 global shuffleState
 shuffleState = False
 
@@ -122,12 +122,12 @@ def master():
     if int(slider.get()) == int(songLen):
         # Show that the song is complete
         durLabel.config(text=f"{convTotLen} / {convTotLen}")
-        
-        #if shuffle mode is on, go to a random song
+
+        # if shuffle mode is on, go to a random song
         if shuffleState:
             randSelect()
         else:
-        #Otherwise, move on to the next song
+            # Otherwise, move on to the next song
             nextTrack(1)
 
     # Else, if its paused, we dont want to do anything
@@ -183,7 +183,7 @@ def changeName():
 def stop():
     global playState
 
-    #If the song is already stopped, we error handle
+    # If the song is already stopped, we error handle
     if playState == SONG_NOT_PLAYING:
         return
     # Check to see if folder is empty
@@ -211,35 +211,41 @@ def stop():
     slider.config(value=0)
     durLabel.config(text=f"00:00")
 
-#Functionality for shuffle button
+
+# Functionality for shuffle button
 def shuffleBtnFunc():
     global shuffleState
 
-    #If shuffle True, set shuffle false
+    # If shuffle True, set shuffle false
     if shuffleState:
         shuffleState = False
         shuffleBtn.config(image=shuffleBtnImgGray)
-        #print("Shuffle Off")
-    
-    #If shuffle False, set shuffle ture
+        # print("Shuffle Off")
+
+    # If shuffle False, set shuffle ture
     else:
         shuffleState = True
         shuffleBtn.config(image=shuffleBtnImg)
-        #print("Shuffle On")
+        # print("Shuffle On")
 
-#Random list box selector
-def randSelect() :
+
+# Random list box selector
+def randSelect():
     global playState
-    #Get a random index value for the listbox
-    #Make this not the same as current selection, the song before, or song after (doesnt FEEL random)
-    rand = random.randint(0,trackBox.size()-1)
-    while rand == trackBox.curselection()[0] or rand == trackBox.curselection()[0]-1 or rand == trackBox.curselection()[0]+1:
-        rand = random.randint(0,trackBox.size()-1)
-    #Clear current selection
+    # Get a random index value for the listbox
+    # Make this not the same as current selection, the song before, or song after (doesnt FEEL random)
+    rand = random.randint(0, trackBox.size() - 1)
+    while (
+        rand == trackBox.curselection()[0]
+        or rand == trackBox.curselection()[0] - 1
+        or rand == trackBox.curselection()[0] + 1
+    ):
+        rand = random.randint(0, trackBox.size() - 1)
+    # Clear current selection
     trackBox.selection_clear(0, END)
-    #Set selection to our random one
-    trackBox.selection_set(rand) # Set the index
-    #Activate the random one
+    # Set selection to our random one
+    trackBox.selection_set(rand)  # Set the index
+    # Activate the random one
     trackBox.activate(rand)
 
     # Get the name of the next track, modify for file path, and update listbox selection
@@ -253,7 +259,7 @@ def randSelect() :
     changeName()
     durLabel.config(text=f"00:00")
 
-    #Set slider back to zero
+    # Set slider back to zero
     slider.config(value=0)
 
     # Cancel the currently playing job
@@ -290,7 +296,7 @@ def mainBtnFunc(mainQuery):
         track = getSongPath(track)
         trackIndex = tracks.index(track.replace("./music/", ""))
 
-        #Send slider to 0
+        # Send slider to 0
         slider.config(value=0)
 
         # Load and play the selected track, update play state, and change album cover
@@ -391,44 +397,43 @@ def changeCover(trackNum):
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
-#Function to delete a song
+
+# Function to delete a song
 def delSong():
-    #Stop currently playing song
+    # Stop currently playing song
     stop()
 
-    #Get path for song and cover
+    # Get path for song and cover
     curSelect = trackBox.curselection()
     if not curSelect:
-        messagebox.showerror(
-            "Select Song!",
-            "You must select the song to delete it"
-            )
+        messagebox.showerror("Select Song!", "You must select the song to delete it")
         return
 
     selected = trackBox.get(curSelect[0])
     selectedPath = getSongPath(selected)
 
-    selectedCoverPath = selectedPath.replace("./music/" , "").replace(".mp3", "")
+    selectedCoverPath = selectedPath.replace("./music/", "").replace(".mp3", "")
     selectedCoverPath = f"./music/albumCover/{selectedCoverPath}-cover.jpg"
 
-    #Delete cover, then image
+    # Delete cover, then image
     os.remove(selectedCoverPath)
     os.remove(selectedPath)
 
-    #Change album cover
+    # Change album cover
     curCover = Image.open("./sources/template.png")
     curCover = curCover.resize((250, 250), Image.LANCZOS)
     curCover = ImageTk.PhotoImage(curCover)
     curCoverLabel.configure(image=curCover)
 
-    #Garbage collection
-    curCoverLabel.photo=curCover
+    # Garbage collection
+    curCoverLabel.photo = curCover
 
-    #Reload track list
+    # Reload track list
     reloadTracks()
 
-    # #Move to next track 
+    # #Move to next track
     # nextTrack(1)
+
 
 # Function to get song name
 def getSongName(path):
@@ -468,15 +473,17 @@ def slide(pos):
         pygame.mixer.music.play(loops=0, start=int(curPos))
         slider.config(value=curPos)
 
-#Open folder
+
+# Open folder
 def openFolder():
     print(USER_OS)
-    if USER_OS==OS_LINUX:
+    if USER_OS == OS_LINUX:
         os.system('xdg-open "%s"' % "./music/")
-    elif USER_OS==OS_WIN:
-        os.startfile('.\\music')
-    elif USER_OS==OS_MAC:
+    elif USER_OS == OS_WIN:
+        os.startfile(".\\music")
+    elif USER_OS == OS_MAC:
         pass
+
 
 # Function to change color scheme
 def changeColor(scheme):
@@ -509,7 +516,7 @@ def changeColor(scheme):
         bgSec = "#27262E"
         fgMain = "#EEFAED"
         accent = "#8F36F5"
-        col = "Purple"        
+        col = "Purple"
 
     # Change elements that use the background color
     for i in bgMainBgList:
@@ -528,11 +535,11 @@ def changeColor(scheme):
     trackBox.configure(selectbackground=accent)
     curTitle.configure(bg=accent)
 
-    #Change cur cover border color
+    # Change cur cover border color
     curCoverLabel.config(highlightbackground=bgSec)
 
     # Change the file we're using for the images (it will now default to these)
-    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg,volIcon
+    global playBtnImg, pauseBtnImg, stopBtnImg, frontBtnImg, backBtnImg, shuffleBtnImg, volIcon
 
     playBtnImg = PhotoImage(file=f"./sources/ctrlbtn/playBtnImg{col}.png")
     pauseBtnImg = PhotoImage(file=f"./sources/ctrlbtn/pauseBtnImg{col}.png")
@@ -540,25 +547,25 @@ def changeColor(scheme):
     frontBtnImg = PhotoImage(file=f"./sources/ctrlbtn/frontBtnImg{col}.png")
     backBtnImg = PhotoImage(file=f"./sources/ctrlbtn/backBtnImg{col}.png")
     shuffleBtnImg = PhotoImage(file=f"./sources/ctrlbtn/shuffleBtnImg{col}.png")
-    volIcon= PhotoImage(file=f"./sources/ctrlbtn/volCont{col}.png")
+    volIcon = PhotoImage(file=f"./sources/ctrlbtn/volCont{col}.png")
 
     # Change the button images
 
-    #If song is playing, pause button image should be used
+    # If song is playing, pause button image should be used
     if playState == SONG_IS_PLAYING:
         mainBtn.configure(image=pauseBtnImg)
-        #Stop Garbage collection
+        # Stop Garbage collection
         mainBtn.photo = pauseBtnImg
     else:
-        #Otherwise use play button
+        # Otherwise use play button
         mainBtn.configure(image=playBtnImg)
-        #Stop Garbage collection
+        # Stop Garbage collection
         mainBtn.photo = playBtnImg
 
-    #if shuffle is on, change the image
+    # if shuffle is on, change the image
     if shuffleState:
         shuffleBtn.configure(image=shuffleBtnImg)
-        #Stop Garbage collection
+        # Stop Garbage collection
         shuffleBtn.photo = shuffleBtnImg
 
     stopBtn.configure(image=stopBtnImg)
@@ -574,9 +581,9 @@ def changeColor(scheme):
     backBtn.photo = backBtnImg
     volSliderLabel.photo = volIcon
 
-    #Change the background color of the slider
-    s.configure("Vertical.TScale",background=bgMain)
-    s.configure("Horizontal.TScale",background=bgMain)
+    # Change the background color of the slider
+    s.configure("Vertical.TScale", background=bgMain)
+    s.configure("Horizontal.TScale", background=bgMain)
 
     # Change this to new default
     defaultColor = open("./config/COLOR.txt", "r+")
@@ -615,19 +622,22 @@ def reloadTracks():
         name = name.replace("_", " ")
         trackBox.insert("end", name)
 
-#Volume slider funtion
+
+# Volume slider funtion
 def volSliderFunc(x):
-    vol= volSlider.get()
+    vol = volSlider.get()
     pygame.mixer.music.set_volume(volSlider.get())
-    #volSliderLabel.config(text=f"{int(pygame.mixer.music.get_volume()*100)}%")
+    # volSliderLabel.config(text=f"{int(pygame.mixer.music.get_volume()*100)}%")
     # printpygame.mixer.music.get_volume()
     # pass
 
-#Link to github page
-def openGithub():
-    webbrowser.open('https://github.com/Arctican4Real/Melodia')
 
-#Auto play capability
+# Link to github page
+def openGithub():
+    webbrowser.open("https://github.com/Arctican4Real/Melodia")
+
+
+# Auto play capability
 
 ### UI CODE ###
 
@@ -636,11 +646,13 @@ settings = Menu(screen, bg=bgSec, fg=fgMain, bd=0)
 screen.config(menu=settings)
 
 # Code for download button on menu bar
-downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0,tearoff="off")
+downloadMenu = Menu(settings, bg=bgMain, fg=fgMain, bd=0, tearoff="off")
 settings.add_cascade(label="Download", menu=downloadMenu)
 
 # Button to download songs
-downloadMenu.add_command(label="Get Song", command=lambda:download.downloadSong(screen))
+downloadMenu.add_command(
+    label="Get Song", command=lambda: download.downloadSong(screen)
+)
 # Button to reload the tracks
 downloadMenu.add_command(label="Reload Tracks", command=reloadTracks)
 # Add folder button
@@ -657,21 +669,21 @@ themeMenu.add_command(label="Lush", command=lambda: changeColor("GREEN"))
 themeMenu.add_command(label="Moonlit", command=lambda: changeColor("BLUE"))
 themeMenu.add_command(label="Nebula", command=lambda: changeColor("PURPLE"))
 
-#Github page link
+# Github page link
 settings.add_command(label="Github", command=openGithub)
 
 # Frames
 left_frame = Frame(screen, bg=bgMain)
-left_frame.grid(row=0, column=1, padx=(0,5), pady=(0,0), sticky="ew")
+left_frame.grid(row=0, column=1, padx=(0, 5), pady=(0, 0), sticky="ew")
 
 right_frame = Frame(screen, bg=bgMain)
-right_frame.grid(row=0, column=2, padx=(0,10), pady=(0,0), sticky="ew")
+right_frame.grid(row=0, column=2, padx=(0, 10), pady=(0, 0), sticky="ew")
 
 down_frame = Frame(screen, bg=bgMain)
-down_frame.grid(row=1, column=0, padx=22, pady=0,sticky="ew",columnspan=4)
+down_frame.grid(row=1, column=0, padx=22, pady=0, sticky="ew", columnspan=4)
 
 btnDiv = Frame(screen, bg=bgMain)
-btnDiv.grid(row=2,column=0,padx=22,pady=10,sticky="ew",columnspan=4)
+btnDiv.grid(row=2, column=0, padx=22, pady=10, sticky="ew", columnspan=4)
 
 # Add weight to the rows and columns for right_frame
 screen.grid_rowconfigure(0, weight=1)
@@ -691,9 +703,9 @@ trackBox = Listbox(
     width=TBWidth,
     height=18,
     activestyle="none",
-    selectmode=SINGLE
+    selectmode=SINGLE,
 )
-trackBox.grid(row=0, column=0, sticky="ew", padx=0,pady=(21,30))
+trackBox.grid(row=0, column=0, sticky="ew", padx=0, pady=(21, 30))
 
 # Defualt to the first track in the listbox
 trackBox.activate(0)
@@ -709,8 +721,8 @@ if not emptyFolder:
 else:
     albumCover = "./sources/template.png"
 
-volSliderFrame=Frame(screen, bg=bgMain)
-volSliderFrame.grid(row=0,column=0,padx=5)
+volSliderFrame = Frame(screen, bg=bgMain)
+volSliderFrame.grid(row=0, column=0, padx=5)
 
 volSliderLabel = Label(
     volSliderFrame,
@@ -719,8 +731,8 @@ volSliderLabel = Label(
     bd=0,
     bg=bgMain,
     fg=fgMain,
-    image=volIcon
-    )
+    image=volIcon,
+)
 volSliderLabel.grid(column=0, row=2)
 
 # Volume control Slider
@@ -731,20 +743,27 @@ volSlider = ttk.Scale(
     orient=VERTICAL,
     value=100,
     length=290,
-    command=volSliderFunc
-    )
-s=ttk.Style()
-s.configure("Vertical.TScale",sliderthickness=10)
-volSlider.grid(column=0,row=0,pady=(0,10),sticky="ns")
+    command=volSliderFunc,
+)
+s = ttk.Style()
+s.configure("Vertical.TScale", sliderthickness=10)
+volSlider.grid(column=0, row=0, pady=(0, 10), sticky="ns")
 
-#Cover art
+# Cover art
 global curCover
 curCover = Image.open(albumCover)
 curCover = curCover.resize((250, 250), Image.LANCZOS)
 curCover = ImageTk.PhotoImage(curCover)
 
-curCoverLabel = Label(left_frame,image=curCover, borderwidth=0, highlightthickness=4, highlightbackground=bgSec, bg=bgMain)
-curCoverLabel.grid(pady=10,column=1,row=0)
+curCoverLabel = Label(
+    left_frame,
+    image=curCover,
+    borderwidth=0,
+    highlightthickness=4,
+    highlightbackground=bgSec,
+    bg=bgMain,
+)
+curCoverLabel.grid(pady=10, column=1, row=0)
 
 # Display the song duration
 durLabel = Label(
@@ -760,7 +779,7 @@ durLabel = Label(
     font=("Arial", 16),
 )
 
-durLabel.grid(row=2,column=1, columnspan=1,pady=10)
+durLabel.grid(row=2, column=1, columnspan=1, pady=10)
 
 # Slider for song duration
 slider = ttk.Scale(
@@ -770,11 +789,11 @@ slider = ttk.Scale(
     orient=HORIZONTAL,
     value=0,
     length=470,
-    #command=slide,
+    # command=slide,
 )
-slider.grid(column=3,pady=0,ipadx=10,columnspan=4)
+slider.grid(column=3, pady=0, ipadx=10, columnspan=4)
 
-#Only trigger the slide event when slider stops moving
+# Only trigger the slide event when slider stops moving
 slider.bind("<ButtonRelease-1>", slide)
 
 # Text box for song length
@@ -786,9 +805,9 @@ else:
 
 # Display the current song name
 curTitle = Label(left_frame, text=firstTrack, bd=1, bg=accent, fg=bgMain)
-curTitle.grid(row=1,column=1, ipady=0, pady=0,sticky="ew")
+curTitle.grid(row=1, column=1, ipady=0, pady=0, sticky="ew")
 
-#Buttons
+# Buttons
 
 # Create control buttons
 mainBtn = Button(
@@ -800,7 +819,7 @@ mainBtn = Button(
     highlightthickness=0,
     bd=0,
     relief=SUNKEN,
-    activebackground=bgSec
+    activebackground=bgSec,
 )
 stopBtn = Button(
     btnDiv,
@@ -811,7 +830,7 @@ stopBtn = Button(
     highlightthickness=0,
     bd=0,
     relief=SUNKEN,
-    activebackground=bgSec
+    activebackground=bgSec,
 )
 backBtn = Button(
     btnDiv,
@@ -822,7 +841,7 @@ backBtn = Button(
     highlightthickness=0,
     bd=0,
     relief=SUNKEN,
-    activebackground=bgSec
+    activebackground=bgSec,
 )
 frontBtn = Button(
     btnDiv,
@@ -833,7 +852,7 @@ frontBtn = Button(
     highlightthickness=0,
     bd=0,
     relief=SUNKEN,
-    activebackground=bgSec
+    activebackground=bgSec,
 )
 shuffleBtn = Button(
     btnDiv,
@@ -844,15 +863,15 @@ shuffleBtn = Button(
     highlightthickness=0,
     bd=0,
     relief=SUNKEN,
-    activebackground=bgSec
+    activebackground=bgSec,
 )
 
 # Grid layout for control buttons
-backBtn.grid(row=0, column=0, padx=(10,60), pady=(0,10))
-mainBtn.grid(row=0, column=1, padx=(0,60), pady=(0,10))
-stopBtn.grid(row=0, column=2, padx=(0,60), pady=(0,10))
-frontBtn.grid(row=0, column=3, padx=(0,60), pady=(0,10))
-shuffleBtn.grid(row=0, column=4, padx=(0,10), pady=(0,10))
+backBtn.grid(row=0, column=0, padx=(10, 60), pady=(0, 10))
+mainBtn.grid(row=0, column=1, padx=(0, 60), pady=(0, 10))
+stopBtn.grid(row=0, column=2, padx=(0, 60), pady=(0, 10))
+frontBtn.grid(row=0, column=3, padx=(0, 60), pady=(0, 10))
+shuffleBtn.grid(row=0, column=4, padx=(0, 10), pady=(0, 10))
 
 
 # A list containing elements which use saved colors
@@ -874,15 +893,15 @@ bgMainBgList = [
     down_frame,
     btnDiv,
     volSliderLabel,
-    volSliderFrame
+    volSliderFrame,
 ]
 fgMainFgList = [trackBox, settings, downloadMenu, themeMenu, durLabel]
-bgSecBgList = [settings,trackBox]
+bgSecBgList = [settings, trackBox]
 
 # Get the default color
 defaultColor = open("./config/COLOR.txt", "rt")
 changeColor(defaultColor.read())
 defaultColor.close()
 
-#initiate
+# initiate
 screen.mainloop()
