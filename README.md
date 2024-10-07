@@ -35,18 +35,18 @@ The initial release will be a desktop application, with potential plans for futu
 ## Current Progress
 
 ### Working On
-- Button to access music folder
-- Autoplay and Loop buttons
+- Button to access music folder ✔️
+- Autoplay and Loop buttons     ✔️
 
 ### Planned Features
-- Change to a more reliable music search API key
-- Create database and store more information about the Tracks
-- Implement Playlists
-- Implement Shuffle Play
-- Add option to search both tracks or album
-- Connect music GUI to Download feature
-- Add secret features
-- Autoplay, Themes, Loops
+- Change to a more reliable music search API key                ✔️
+- Create database and store more information about the Tracks   ⏳
+- Implement Playlists                                           ⏳
+- Implement Shuffle Play                                        ✔️
+- Add option to search both tracks or album                     ⏳
+- Connect music GUI to Download feature                         ✔️
+- Add secret features                                           ⏳
+- Autoplay, Themes, Loops                                       ✔️
 
 ## Contributors
 - Adeeb Rahman
