@@ -6,7 +6,6 @@
 This project aims to create a feature-rich music playing application that effectively serves as an offline mp3 player, providing users with a wide range of functionalities.The application will enable users to:
 - Search and save music
 - Have all features of a general MP3 player (pause, play, skip, autoplay, etc.)
-- Play, Create and Edit Playlists
 - Interact with the app through a mordern UI
 
 ![Sample Image](./sources/preview2.png?raw=true "Sample Image")
@@ -34,24 +33,26 @@ The initial release will be a desktop application, with potential plans for futu
 
 ## Current Progress
 
-### Working On
-- Button to access music folder ✔️
-- Autoplay and Loop buttons     ✔️
-
 ### Planned Features
-- Change to a more reliable music search API key                ✔️
 - Create database and store more information about the Tracks   ⏳
 - Implement Playlists                                           ⏳
-- Implement Shuffle Play                                        ✔️
 - Add option to search both tracks or album                     ⏳
-- Connect music GUI to Download feature                         ✔️
 - Add secret features                                           ⏳
+
+
+### Completed
+- Connect music GUI to Download feature                         ✔️
 - Autoplay, Themes, Loops                                       ✔️
+- Implement Shuffle Play                                        ✔️
+- Change to a more reliable music search API key                ✔️
+
 
 ## Contributors
 - Adeeb Rahman
-- Shubham Sharma
-- Nazia Kaesh
+
+### Special Thanks
+- Shubham Sharma for Download Screen UI
+- Nazia Kaesh  for skeleton of Main Screen UI
 
 ## Disclaimer
 Usage Disclaimer for Melodia Music Player:
