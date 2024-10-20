@@ -52,7 +52,8 @@ The initial release will be a desktop application, with potential plans for futu
 
 ### Special Thanks
 - Shubham Sharma for Download Screen UI
-- Nazia Kaesh  for skeleton of Main Screen UI
+- [Nazia](https://github.com/JadeEmpresss)  for skeleton of Main Screen UI
+- [Neil](https://github.com/ineed-cmyk)  for debugging help
 
 ## Disclaimer
 Usage Disclaimer for Melodia Music Player:
