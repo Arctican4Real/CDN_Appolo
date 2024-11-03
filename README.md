@@ -49,10 +49,8 @@ The initial release will be a desktop application, with potential plans for futu
 
 ## Contributors
 - Adeeb Rahman
-
-### Special Thanks
-- Shubham Sharma for Download Screen UI
-- Nazia Kaesh  for skeleton of Main Screen UI
+- Shubham Sharma
+- Nazia Kaesh
 
 ## Disclaimer
 Usage Disclaimer for Melodia Music Player:
